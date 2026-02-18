@@ -862,7 +862,18 @@
     /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
       .nav-dots {
+        right: 12px;
+        gap: 10px;
+      }
+
+      .nav-dot {
+        width: 6px;
+        height: 6px;
+      }
+
+      .nav-dot::after {
         display: none;
+        /* Hide labels on mobile to avoid clutter */
       }
 
       .section-inner {
