@@ -146,6 +146,15 @@
       transform: translateY(0);
     }
 
+    /* Safety fallback for mobile/reduced motion */
+    @media (max-width: 768px) {
+      .section-inner {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+    }
+
     /* ===== HERO ===== */
     .hero {
       min-height: 100vh;
@@ -704,6 +713,13 @@
       text-align: center;
       max-width: 680px;
       margin: 0 auto;
+      opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+      .finale-text {
+        font-size: 20px;
+      }
     }
 
     .finale-text em {
@@ -867,8 +883,9 @@
       }
 
       .nav-dot {
-        width: 6px;
-        height: 6px;
+        width: 8px;
+        height: 8px;
+        border-color: var(--text-muted);
       }
 
       .nav-dot::after {
@@ -1938,13 +1955,27 @@
           </text>
         </svg>
       </div>
+
+      <div class="finale-text" style="margin-top: 60px;">
+        <p>Happiness is not a single computation. It is a meta-signal — the brain's global assessment that reward
+          predictions are stable, timescales are aligned, homeostatic errors are low, social models are calibrated, and
+          the generative model is effectively minimizing free energy.</p>
+        <br><br>
+        <p>It is the feeling of <em>a mind that fits its world.</em></p>
+        <br><br>
+        <p>You can't hack your way around billions of years of Bayesian optimization. The system knows what it wants.
+          Alignment with that is what wellbeing <em>feels</em> like.</p>
+        <br><br>
+        <p style="font-size:0.7em; opacity: 0.5;">And sometimes the engineer sees it before the biologist does.</p>
+      </div>
     </div>
   </section>
 
   <!-- ========== CH 9: BIOLOGICAL BASELINES ========== -->
   <section class="section" id="sec-9">
     <div class="section-inner">
-      <div class="chapter-num bio section-divider">BIOLOGICAL BASELINES</div>
+      <div class="section-divider"></div>
+      <div class="chapter-num bio">BIOLOGICAL BASELINES</div>
       <h2>Foundational Algorithms</h2>
 
       <div class="compare-grid" style="grid-template-columns: 1fr; gap: 32px; max-width: 720px; margin: 0 auto;">
@@ -1991,7 +2022,8 @@
   <!-- ========== CH 10: PRACTICAL PROTOCOLS ========== -->
   <section class="section" id="sec-10">
     <div class="section-inner">
-      <div class="chapter-num neural section-divider">PRACTICAL PROTOCOLS</div>
+      <div class="section-divider"></div>
+      <div class="chapter-num neural">PRACTICAL PROTOCOLS</div>
       <h2>Algorithms for a Coherent Life</h2>
 
       <div class="compare-grid" style="grid-template-columns: 1fr; gap: 32px; max-width: 720px; margin: 0 auto;">
@@ -2092,24 +2124,6 @@
 
       </div>
 
-    </div>
-  </section>
-
-  <!-- ========== FINALE ========== -->
-  <section class="section">
-    <div class="section-inner">
-      <div class="finale-text">
-        <p>Happiness is not a single computation. It is a meta-signal — the brain's global assessment that reward
-          predictions are stable, timescales are aligned, homeostatic errors are low, social models are calibrated, and
-          the generative model is effectively minimizing free energy.</p>
-        <br><br>
-        <p>It is the feeling of <em>a mind that fits its world.</em></p>
-        <br><br>
-        <p>You can't hack your way around billions of years of Bayesian optimization. The system knows what it wants.
-          Alignment with that is what wellbeing <em>feels</em> like.</p>
-        <br><br>
-        <p style="font-size:0.7em; opacity: 0.5;">And sometimes the engineer sees it before the biologist does.</p>
-      </div>
     </div>
   </section>
 
@@ -2339,7 +2353,7 @@
           navDots.forEach((d, i) => d.classList.toggle('active', i === idx));
         }
       });
-    }, { threshold: 0.3 });
+    }, { threshold: 0.1 });
 
     sections.forEach(s => observer.observe(s));
 
