@@ -1,1553 +1,2150 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Shape of Happiness — A Neurocomputational Journey</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@300;400&family=DM+Sans:wght@300;400;500&display=swap');
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Shape of Happiness — A Neurocomputational Journey</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@300;400&family=DM+Sans:wght@300;400;500&display=swap');
 
-:root {
-  --bg-deep: #050508;
-  --bg-section: #08080e;
-  --text-primary: #e8e4dd;
-  --text-muted: #8a8680;
-  --text-dim: #4a4844;
-  --accent-bio: #00e5a0;
-  --accent-neural: #6366f1;
-  --accent-warm: #f59e0b;
-  --accent-coral: #f472b6;
-  --accent-cyan: #22d3ee;
-  --glow-bio: rgba(0,229,160,0.15);
-  --glow-neural: rgba(99,102,241,0.15);
-}
+    :root {
+      --bg-deep: #050508;
+      --bg-section: #08080e;
+      --text-primary: #e8e4dd;
+      --text-muted: #8a8680;
+      --text-dim: #4a4844;
+      --accent-bio: #00e5a0;
+      --accent-neural: #6366f1;
+      --accent-warm: #f59e0b;
+      --accent-coral: #f472b6;
+      --accent-cyan: #22d3ee;
+      --glow-bio: rgba(0, 229, 160, 0.15);
+      --glow-neural: rgba(99, 102, 241, 0.15);
+    }
 
-* { margin:0; padding:0; box-sizing:border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-html {
-  scroll-behavior: smooth;
-  scrollbar-width: thin;
-  scrollbar-color: var(--text-dim) var(--bg-deep);
-}
+    html {
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: var(--text-dim) var(--bg-deep);
+    }
 
-body {
-  background: var(--bg-deep);
-  color: var(--text-primary);
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 300;
-  overflow-x: hidden;
-  line-height: 1.7;
-}
+    body {
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      line-height: 1.7;
+    }
 
-/* ===== CANVAS ===== */
-#bg-canvas {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  z-index: 0;
-  pointer-events: none;
-}
+    /* ===== CANVAS ===== */
+    #bg-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
 
-/* ===== PROGRESS BAR ===== */
-.progress-track {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 3px;
-  z-index: 1000;
-  background: rgba(255,255,255,0.03);
-}
-.progress-fill {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, var(--accent-bio), var(--accent-neural), var(--accent-coral));
-  transition: width 0.1s linear;
-}
+    /* ===== PROGRESS BAR ===== */
+    .progress-track {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.03);
+    }
 
-/* ===== NAV DOTS ===== */
-.nav-dots {
-  position: fixed;
-  right: 28px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 100;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-.nav-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  border: 1px solid var(--text-dim);
-  background: transparent;
-  cursor: pointer;
-  transition: all 0.4s ease;
-  position: relative;
-}
-.nav-dot.active {
-  background: var(--accent-bio);
-  border-color: var(--accent-bio);
-  box-shadow: 0 0 12px var(--glow-bio);
-}
-.nav-dot::after {
-  content: attr(data-label);
-  position: absolute;
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  white-space: nowrap;
-  font-size: 11px;
-  font-family: 'JetBrains Mono', monospace;
-  color: var(--text-muted);
-  opacity: 0;
-  transition: opacity 0.3s;
-  pointer-events: none;
-  letter-spacing: 0.5px;
-}
-.nav-dot:hover::after { opacity: 1; }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-bio), var(--accent-neural), var(--accent-coral));
+      transition: width 0.1s linear;
+    }
 
-/* ===== SECTIONS ===== */
-.section {
-  min-height: 100vh;
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  padding: 80px 0;
-}
+    /* ===== NAV DOTS ===== */
+    .nav-dots {
+      position: fixed;
+      right: 28px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
 
-.section-inner {
-  max-width: 820px;
-  margin: 0 auto;
-  padding: 0 40px;
-  opacity: 0;
-  transform: translateY(60px);
-  transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.section-inner.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+    .nav-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      border: 1px solid var(--text-dim);
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      position: relative;
+    }
 
-/* ===== HERO ===== */
-.hero {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  position: relative;
-  z-index: 1;
-}
-.hero-overline {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: var(--accent-bio);
-  margin-bottom: 24px;
-  opacity: 0;
-  animation: fadeUp 1s 0.3s forwards;
-}
-.hero h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(42px, 7vw, 88px);
-  font-weight: 400;
-  line-height: 1.1;
-  letter-spacing: -1px;
-  opacity: 0;
-  animation: fadeUp 1.2s 0.5s forwards;
-}
-.hero h1 em {
-  font-style: italic;
-  background: linear-gradient(135deg, var(--accent-bio), var(--accent-cyan));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.hero-sub {
-  font-size: 18px;
-  color: var(--text-muted);
-  margin-top: 28px;
-  max-width: 520px;
-  opacity: 0;
-  animation: fadeUp 1s 0.8s forwards;
-}
-.hero-scroll {
-  position: absolute;
-  bottom: 40px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 3px;
-  color: var(--text-dim);
-  opacity: 0;
-  animation: fadeUp 1s 1.2s forwards;
-}
-.hero-scroll span {
-  display: block;
-  width: 1px; height: 40px;
-  background: linear-gradient(to bottom, var(--text-dim), transparent);
-  margin: 12px auto 0;
-  animation: scrollPulse 2s infinite;
-}
+    .nav-dot.active {
+      background: var(--accent-bio);
+      border-color: var(--accent-bio);
+      box-shadow: 0 0 12px var(--glow-bio);
+    }
 
-/* ===== CHAPTER HEADERS ===== */
-.chapter-num {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.chapter-num::before {
-  content: '';
-  display: block;
-  width: 30px; height: 1px;
-}
-.chapter-num.bio { color: var(--accent-bio); }
-.chapter-num.bio::before { background: var(--accent-bio); }
-.chapter-num.neural { color: var(--accent-neural); }
-.chapter-num.neural::before { background: var(--accent-neural); }
-.chapter-num.warm { color: var(--accent-warm); }
-.chapter-num.warm::before { background: var(--accent-warm); }
-.chapter-num.coral { color: var(--accent-coral); }
-.chapter-num.coral::before { background: var(--accent-coral); }
-.chapter-num.cyan { color: var(--accent-cyan); }
-.chapter-num.cyan::before { background: var(--accent-cyan); }
+    .nav-dot::after {
+      content: attr(data-label);
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      white-space: nowrap;
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-muted);
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      letter-spacing: 0.5px;
+    }
 
-.section h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(32px, 4.5vw, 52px);
-  font-weight: 400;
-  line-height: 1.15;
-  margin-bottom: 32px;
-  letter-spacing: -0.5px;
-}
-.section h2 em {
-  font-style: italic;
-  opacity: 0.7;
-}
+    .nav-dot:hover::after {
+      opacity: 1;
+    }
 
-.section p {
-  font-size: 17px;
-  color: var(--text-muted);
-  margin-bottom: 24px;
-  max-width: 640px;
-}
-.section p strong {
-  color: var(--text-primary);
-  font-weight: 500;
-}
+    /* ===== SECTIONS ===== */
+    .section {
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      padding: 80px 0;
+    }
 
-/* ===== 3D DIAGRAM CONTAINERS ===== */
-.diagram-3d {
-  width: 100%;
-  height: 340px;
-  margin: 40px 0;
-  position: relative;
-  perspective: 1200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+    .section-inner {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 0 40px;
+      opacity: 0;
+      transform: translateY(60px);
+      transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
 
-/* Cell visualization */
-.cell-viz {
-  width: 180px; height: 180px;
-  border-radius: 50%;
-  position: relative;
-  animation: cellPulse 4s ease-in-out infinite;
-}
-.cell-membrane {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  border: 2px solid var(--accent-bio);
-  box-shadow: 0 0 30px var(--glow-bio), inset 0 0 30px var(--glow-bio);
-  animation: membranePulse 3s ease-in-out infinite;
-}
-.cell-nucleus {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 60px; height: 60px;
-  border-radius: 50%;
-  background: radial-gradient(circle, var(--accent-bio) 0%, transparent 70%);
-  opacity: 0.6;
-  animation: nucleusPulse 2.5s ease-in-out infinite;
-}
-.cell-signal {
-  position: absolute;
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--accent-cyan);
-  box-shadow: 0 0 8px var(--accent-cyan);
-}
-.cell-signal:nth-child(3) { animation: signalOrbit1 5s linear infinite; }
-.cell-signal:nth-child(4) { animation: signalOrbit2 4s linear infinite; }
-.cell-signal:nth-child(5) { animation: signalOrbit3 6s linear infinite; }
+    .section-inner.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
-/* Neural network viz */
-.neural-net-container {
-  width: 100%;
-  height: 100%;
-  position: relative;
-}
-.neural-canvas {
-  width: 100%; height: 100%;
-}
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
 
-/* Attractor basin */
-.attractor-container {
-  width: 100%; height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.attractor-basin {
-  width: 320px; height: 200px;
-  position: relative;
-  transform: rotateX(55deg) rotateZ(-15deg);
-  transform-style: preserve-3d;
-}
-.basin-ring {
-  position: absolute;
-  border-radius: 50%;
-  border: 1px solid;
-  left: 50%; top: 50%;
-  animation: basinFloat 6s ease-in-out infinite;
-}
+    .hero-overline {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--accent-bio);
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 1s 0.3s forwards;
+    }
 
-/* Prediction error viz */
-.prediction-viz {
-  display: flex;
-  align-items: center;
-  gap: 48px;
-  justify-content: center;
-  width: 100%; height: 100%;
-}
-.pred-bar-group {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-}
-.pred-bar {
-  width: 40px;
-  border-radius: 4px;
-  position: relative;
-  transition: height 1s ease;
-}
-.pred-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 1px;
-  color: var(--text-dim);
-  text-transform: uppercase;
-}
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(42px, 7vw, 88px);
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      opacity: 0;
+      animation: fadeUp 1.2s 0.5s forwards;
+    }
 
-/* Timescale alignment */
-.timescale-viz {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 100%;
-  max-width: 500px;
-  margin: 0 auto;
-}
-.timescale-row {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-.ts-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 1px;
-  color: var(--text-dim);
-  width: 100px;
-  text-align: right;
-  text-transform: uppercase;
-}
-.ts-bar-track {
-  flex: 1;
-  height: 4px;
-  background: rgba(255,255,255,0.04);
-  border-radius: 2px;
-  overflow: hidden;
-  position: relative;
-}
-.ts-bar-fill {
-  height: 100%;
-  border-radius: 2px;
-  width: 0%;
-  transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
+    .hero h1 em {
+      font-style: italic;
+      background: linear-gradient(135deg, var(--accent-bio), var(--accent-cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-/* ===== QUOTE BLOCK ===== */
-.quote-block {
-  border-left: 2px solid var(--accent-warm);
-  padding: 24px 0 24px 28px;
-  margin: 40px 0;
-}
-.quote-block p {
-  font-family: 'Playfair Display', serif;
-  font-size: 22px;
-  font-style: italic;
-  color: var(--text-primary);
-  line-height: 1.5;
-}
-.quote-attr {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  color: var(--text-dim);
-  margin-top: 12px;
-  letter-spacing: 1px;
-}
+    .hero-sub {
+      font-size: 18px;
+      color: var(--text-muted);
+      margin-top: 28px;
+      max-width: 520px;
+      opacity: 0;
+      animation: fadeUp 1s 0.8s forwards;
+    }
 
-/* ===== INSIGHT CARD ===== */
-.insight-card {
-  background: linear-gradient(135deg, rgba(99,102,241,0.06), rgba(0,229,160,0.04));
-  border: 1px solid rgba(255,255,255,0.05);
-  border-radius: 12px;
-  padding: 32px;
-  margin: 36px 0;
-  position: relative;
-  overflow: hidden;
-}
-.insight-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--accent-neural), transparent);
-}
-.insight-card h4 {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--accent-neural);
-  margin-bottom: 16px;
-}
-.insight-card p {
-  font-size: 15px;
-  color: var(--text-muted);
-  margin-bottom: 0;
-}
+    .hero-scroll {
+      position: absolute;
+      bottom: 40px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--text-dim);
+      opacity: 0;
+      animation: fadeUp 1s 1.2s forwards;
+    }
 
-/* ===== COMPARISON SECTION ===== */
-.compare-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  margin: 36px 0;
-}
-.compare-card {
-  padding: 28px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.05);
-  position: relative;
-  overflow: hidden;
-}
-.compare-card.engineer {
-  background: linear-gradient(145deg, rgba(245,158,11,0.06), transparent);
-}
-.compare-card.engineer::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 3px; height: 100%;
-  background: var(--accent-warm);
-}
-.compare-card.biologist {
-  background: linear-gradient(145deg, rgba(99,102,241,0.06), transparent);
-}
-.compare-card.biologist::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 3px; height: 100%;
-  background: var(--accent-neural);
-}
-.compare-card h4 {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin-bottom: 14px;
-}
-.compare-card.engineer h4 { color: var(--accent-warm); }
-.compare-card.biologist h4 { color: var(--accent-neural); }
-.compare-card p {
-  font-size: 14px;
-  color: var(--text-muted);
-  margin-bottom: 12px;
-}
-.compare-card .tag {
-  display: inline-block;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 1px;
-  padding: 4px 10px;
-  border-radius: 20px;
-  margin-top: 8px;
-}
-.compare-card.engineer .tag {
-  background: rgba(245,158,11,0.1);
-  color: var(--accent-warm);
-}
-.compare-card.biologist .tag {
-  background: rgba(99,102,241,0.1);
-  color: var(--accent-neural);
-}
+    .hero-scroll span {
+      display: block;
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--text-dim), transparent);
+      margin: 12px auto 0;
+      animation: scrollPulse 2s infinite;
+    }
 
-/* ===== FINALE ===== */
-.finale-text {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(24px, 3.5vw, 36px);
-  font-weight: 400;
-  line-height: 1.4;
-  color: var(--text-primary);
-  text-align: center;
-  max-width: 680px;
-  margin: 0 auto;
-}
-.finale-text em {
-  font-style: italic;
-  background: linear-gradient(135deg, var(--accent-warm), var(--accent-coral));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
+    /* ===== CHAPTER HEADERS ===== */
+    .chapter-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
 
-/* ===== FOOTER ===== */
-.footer {
-  text-align: center;
-  padding: 80px 40px;
-  position: relative;
-  z-index: 1;
-}
-.footer p {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 2px;
-  color: var(--text-dim);
-}
+    .chapter-num::before {
+      content: '';
+      display: block;
+      width: 30px;
+      height: 1px;
+    }
 
-/* ===== ANIMATIONS ===== */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes scrollPulse {
-  0%, 100% { opacity: 0.3; transform: scaleY(1); }
-  50% { opacity: 0.8; transform: scaleY(1.2); }
-}
-@keyframes cellPulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.04); }
-}
-@keyframes membranePulse {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
-}
-@keyframes nucleusPulse {
-  0%, 100% { opacity: 0.4; transform: translate(-50%,-50%) scale(1); }
-  50% { opacity: 0.7; transform: translate(-50%,-50%) scale(1.1); }
-}
-@keyframes signalOrbit1 {
-  0% { transform: rotate(0deg) translateX(80px) rotate(0deg); }
-  100% { transform: rotate(360deg) translateX(80px) rotate(-360deg); }
-}
-@keyframes signalOrbit2 {
-  0% { transform: rotate(120deg) translateX(70px) rotate(-120deg); }
-  100% { transform: rotate(480deg) translateX(70px) rotate(-480deg); }
-}
-@keyframes signalOrbit3 {
-  0% { transform: rotate(240deg) translateX(90px) rotate(-240deg); }
-  100% { transform: rotate(600deg) translateX(90px) rotate(-600deg); }
-}
-@keyframes basinFloat {
-  0%, 100% { transform: translateZ(0px); }
-  50% { transform: translateZ(8px); }
-}
-@keyframes neuronFire {
-  0% { opacity: 0.15; }
-  10% { opacity: 1; }
-  100% { opacity: 0.15; }
-}
-@keyframes waveFlow {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
+    .chapter-num.bio {
+      color: var(--accent-bio);
+    }
 
-/* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
-  .nav-dots { display: none; }
-  .section-inner { padding: 0 24px; }
-  .compare-grid { grid-template-columns: 1fr; }
-  .diagram-3d { height: 260px; }
-  .prediction-viz { gap: 24px; }
-}
+    .chapter-num.bio::before {
+      background: var(--accent-bio);
+    }
 
-/* ===== PARTICLE BACKGROUND OVERLAY ===== */
-.grain-overlay {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.03;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-}
+    .chapter-num.neural {
+      color: var(--accent-neural);
+    }
 
-/* Section dividers */
-.section-divider {
-  width: 60px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--text-dim), transparent);
-  margin: 0 auto 40px;
-}
+    .chapter-num.neural::before {
+      background: var(--accent-neural);
+    }
 
-/* Footnotes */
-.footnote-ref {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  color: var(--accent-bio);
-  cursor: pointer;
-  padding: 0 3px;
-  border-radius: 3px;
-  transition: background 0.2s;
-  text-decoration: none;
-  vertical-align: super;
-  line-height: 0;
-}
-.footnote-ref:hover {
-  background: rgba(0,229,160,0.1);
-}
-.footnote-box {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s, margin 0.4s;
-  opacity: 0;
-  margin: 0;
-  background: linear-gradient(145deg, rgba(0,229,160,0.04), rgba(0,229,160,0.01));
-  border: 1px solid rgba(0,229,160,0.08);
-  border-radius: 10px;
-  padding: 0 28px;
-}
-.footnote-box.open {
-  max-height: 600px;
-  opacity: 1;
-  margin: 24px 0;
-  padding: 24px 28px;
-}
-.footnote-header {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--accent-bio);
-  margin-bottom: 14px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.footnote-num {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 18px; height: 18px;
-  border-radius: 50%;
-  border: 1px solid var(--accent-bio);
-  font-size: 10px;
-  color: var(--accent-bio);
-}
-.footnote-body p {
-  font-size: 14px !important;
-  color: var(--text-muted) !important;
-  margin-bottom: 14px !important;
-  line-height: 1.65;
-}
-.footnote-body p:last-child {
-  margin-bottom: 0 !important;
-}
-.footnote-body em {
-  color: var(--text-primary);
-  font-style: italic;
-}
+    .chapter-num.warm {
+      color: var(--accent-warm);
+    }
 
-/* Glow orbs */
-.glow-orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  pointer-events: none;
-  opacity: 0.15;
-}
+    .chapter-num.warm::before {
+      background: var(--accent-warm);
+    }
 
-/* Wave animation for timescales */
-.wave-line {
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--accent-bio), transparent);
-  animation: waveFlow 3s linear infinite;
-  border-radius: 1px;
-}
-</style>
+    .chapter-num.coral {
+      color: var(--accent-coral);
+    }
+
+    .chapter-num.coral::before {
+      background: var(--accent-coral);
+    }
+
+    .chapter-num.cyan {
+      color: var(--accent-cyan);
+    }
+
+    .chapter-num.cyan::before {
+      background: var(--accent-cyan);
+    }
+
+    .section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(32px, 4.5vw, 52px);
+      font-weight: 400;
+      line-height: 1.15;
+      margin-bottom: 32px;
+      letter-spacing: -0.5px;
+    }
+
+    .section h2 em {
+      font-style: italic;
+      opacity: 0.7;
+    }
+
+    .section p {
+      font-size: 17px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      max-width: 640px;
+    }
+
+    .section p strong {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    /* ===== 3D DIAGRAM CONTAINERS ===== */
+    .diagram-3d {
+      width: 100%;
+      height: 340px;
+      margin: 40px 0;
+      position: relative;
+      perspective: 1200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Cell visualization */
+    .cell-viz {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      position: relative;
+      animation: cellPulse 4s ease-in-out infinite;
+    }
+
+    .cell-membrane {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2px solid var(--accent-bio);
+      box-shadow: 0 0 30px var(--glow-bio), inset 0 0 30px var(--glow-bio);
+      animation: membranePulse 3s ease-in-out infinite;
+    }
+
+    .cell-nucleus {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--accent-bio) 0%, transparent 70%);
+      opacity: 0.6;
+      animation: nucleusPulse 2.5s ease-in-out infinite;
+    }
+
+    .cell-signal {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+      box-shadow: 0 0 8px var(--accent-cyan);
+    }
+
+    .cell-signal:nth-child(3) {
+      animation: signalOrbit1 5s linear infinite;
+    }
+
+    .cell-signal:nth-child(4) {
+      animation: signalOrbit2 4s linear infinite;
+    }
+
+    .cell-signal:nth-child(5) {
+      animation: signalOrbit3 6s linear infinite;
+    }
+
+    /* Neural network viz */
+    .neural-net-container {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    .neural-canvas {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Attractor basin */
+    .attractor-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .attractor-basin {
+      width: 320px;
+      height: 200px;
+      position: relative;
+      transform: rotateX(55deg) rotateZ(-15deg);
+      transform-style: preserve-3d;
+    }
+
+    .basin-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid;
+      left: 50%;
+      top: 50%;
+      animation: basinFloat 6s ease-in-out infinite;
+    }
+
+    /* Prediction error viz */
+    .prediction-viz {
+      display: flex;
+      align-items: center;
+      gap: 48px;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+    }
+
+    .pred-bar-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pred-bar {
+      width: 40px;
+      border-radius: 4px;
+      position: relative;
+      transition: height 1s ease;
+    }
+
+    .pred-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 1px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    /* Timescale alignment */
+    .timescale-viz {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .timescale-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .ts-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: var(--text-dim);
+      width: 100px;
+      text-align: right;
+      text-transform: uppercase;
+    }
+
+    .ts-bar-track {
+      flex: 1;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 2px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .ts-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      width: 0%;
+      transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ===== QUOTE BLOCK ===== */
+    .quote-block {
+      border-left: 2px solid var(--accent-warm);
+      padding: 24px 0 24px 28px;
+      margin: 40px 0;
+    }
+
+    .quote-block p {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-style: italic;
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+
+    .quote-attr {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-dim);
+      margin-top: 12px;
+      letter-spacing: 1px;
+    }
+
+    /* ===== INSIGHT CARD ===== */
+    .insight-card {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.06), rgba(0, 229, 160, 0.04));
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 32px;
+      margin: 36px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .insight-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent-neural), transparent);
+    }
+
+    .insight-card h4 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent-neural);
+      margin-bottom: 16px;
+    }
+
+    .insight-card p {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: 0;
+    }
+
+    /* ===== COMPARISON SECTION ===== */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin: 36px 0;
+    }
+
+    .compare-card {
+      padding: 28px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .compare-card.engineer {
+      background: linear-gradient(145deg, rgba(245, 158, 11, 0.06), transparent);
+    }
+
+    .compare-card.engineer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--accent-warm);
+    }
+
+    .compare-card.biologist,
+    .compare-card.neural {
+      background: linear-gradient(145deg, rgba(99, 102, 241, 0.06), transparent);
+    }
+
+    .compare-card.biologist::before,
+    .compare-card.neural::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--accent-neural);
+    }
+
+    .compare-card.bio {
+      background: linear-gradient(145deg, rgba(0, 229, 160, 0.06), transparent);
+    }
+
+    .compare-card.bio::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--accent-bio);
+    }
+
+    .compare-card.cyan {
+      background: linear-gradient(145deg, rgba(34, 211, 238, 0.06), transparent);
+    }
+
+    .compare-card.cyan::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--accent-cyan);
+    }
+
+    .compare-card.coral {
+      background: linear-gradient(145deg, rgba(244, 114, 182, 0.06), transparent);
+    }
+
+    .compare-card.coral::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--accent-coral);
+    }
+
+    .compare-card h4 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .compare-card.engineer h4 {
+      color: var(--accent-warm);
+    }
+
+    .compare-card.biologist h4,
+    .compare-card.neural h4 {
+      color: var(--accent-neural);
+    }
+
+    .compare-card.bio h4 {
+      color: var(--accent-bio);
+    }
+
+    .compare-card.cyan h4 {
+      color: var(--accent-cyan);
+    }
+
+    .compare-card.coral h4 {
+      color: var(--accent-coral);
+    }
+
+    .compare-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .compare-card .tag {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 1px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-top: 8px;
+    }
+
+    .compare-card.engineer .tag {
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--accent-warm);
+    }
+
+    .compare-card.biologist .tag,
+    .compare-card.neural .tag {
+      background: rgba(99, 102, 241, 0.1);
+      color: var(--accent-neural);
+    }
+
+    .compare-card.bio .tag {
+      background: rgba(0, 229, 160, 0.1);
+      color: var(--accent-bio);
+    }
+
+    .compare-card.cyan .tag {
+      background: rgba(34, 211, 238, 0.1);
+      color: var(--accent-cyan);
+    }
+
+    .compare-card.coral .tag {
+      background: rgba(244, 114, 182, 0.1);
+      color: var(--accent-coral);
+    }
+
+    /* ===== FINALE ===== */
+    .finale-text {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(24px, 3.5vw, 36px);
+      font-weight: 400;
+      line-height: 1.4;
+      color: var(--text-primary);
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .finale-text em {
+      font-style: italic;
+      background: linear-gradient(135deg, var(--accent-warm), var(--accent-coral));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      text-align: center;
+      padding: 80px 40px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer p {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--text-dim);
+    }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes scrollPulse {
+
+      0%,
+      100% {
+        opacity: 0.3;
+        transform: scaleY(1);
+      }
+
+      50% {
+        opacity: 0.8;
+        transform: scaleY(1.2);
+      }
+    }
+
+    @keyframes cellPulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.04);
+      }
+    }
+
+    @keyframes membranePulse {
+
+      0%,
+      100% {
+        opacity: 0.6;
+      }
+
+      50% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes nucleusPulse {
+
+      0%,
+      100% {
+        opacity: 0.4;
+        transform: translate(-50%, -50%) scale(1);
+      }
+
+      50% {
+        opacity: 0.7;
+        transform: translate(-50%, -50%) scale(1.1);
+      }
+    }
+
+    @keyframes signalOrbit1 {
+      0% {
+        transform: rotate(0deg) translateX(80px) rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg) translateX(80px) rotate(-360deg);
+      }
+    }
+
+    @keyframes signalOrbit2 {
+      0% {
+        transform: rotate(120deg) translateX(70px) rotate(-120deg);
+      }
+
+      100% {
+        transform: rotate(480deg) translateX(70px) rotate(-480deg);
+      }
+    }
+
+    @keyframes signalOrbit3 {
+      0% {
+        transform: rotate(240deg) translateX(90px) rotate(-240deg);
+      }
+
+      100% {
+        transform: rotate(600deg) translateX(90px) rotate(-600deg);
+      }
+    }
+
+    @keyframes basinFloat {
+
+      0%,
+      100% {
+        transform: translateZ(0px);
+      }
+
+      50% {
+        transform: translateZ(8px);
+      }
+    }
+
+    @keyframes neuronFire {
+      0% {
+        opacity: 0.15;
+      }
+
+      10% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0.15;
+      }
+    }
+
+    @keyframes waveFlow {
+      0% {
+        transform: translateX(-100%);
+      }
+
+      100% {
+        transform: translateX(100%);
+      }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .nav-dots {
+        display: none;
+      }
+
+      .section-inner {
+        padding: 0 24px;
+      }
+
+      .compare-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .diagram-3d {
+        height: 260px;
+      }
+
+      .prediction-viz {
+        gap: 24px;
+      }
+    }
+
+    /* ===== PARTICLE BACKGROUND OVERLAY ===== */
+    .grain-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    }
+
+    /* Section dividers */
+    .section-divider {
+      width: 60px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--text-dim), transparent);
+      margin: 0 auto 40px;
+    }
+
+    /* Footnotes */
+    .footnote-ref {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--accent-bio);
+      cursor: pointer;
+      padding: 0 3px;
+      border-radius: 3px;
+      transition: background 0.2s;
+      text-decoration: none;
+      vertical-align: super;
+      line-height: 0;
+    }
+
+    .footnote-ref:hover {
+      background: rgba(0, 229, 160, 0.1);
+    }
+
+    .footnote-box {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s, margin 0.4s;
+      opacity: 0;
+      margin: 0;
+      background: linear-gradient(145deg, rgba(0, 229, 160, 0.04), rgba(0, 229, 160, 0.01));
+      border: 1px solid rgba(0, 229, 160, 0.08);
+      border-radius: 10px;
+      padding: 0 28px;
+    }
+
+    .footnote-box.open {
+      max-height: 2000px;
+      opacity: 1;
+      margin: 24px 0;
+      padding: 24px 28px;
+    }
+
+    .footnote-header {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent-bio);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .footnote-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1px solid var(--accent-bio);
+      font-size: 10px;
+      color: var(--accent-bio);
+    }
+
+    .footnote-body p {
+      font-size: 14px !important;
+      color: var(--text-muted) !important;
+      margin-bottom: 14px !important;
+      line-height: 1.65;
+    }
+
+    .footnote-body p:last-child {
+      margin-bottom: 0 !important;
+    }
+
+    .footnote-body em {
+      color: var(--text-primary);
+      font-style: italic;
+    }
+
+    /* Glow orbs */
+    .glow-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      opacity: 0.15;
+    }
+
+    /* Wave animation for timescales */
+    .wave-line {
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent-bio), transparent);
+      animation: waveFlow 3s linear infinite;
+      border-radius: 1px;
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="grain-overlay"></div>
-<canvas id="bg-canvas"></canvas>
+  <div class="grain-overlay"></div>
+  <canvas id="bg-canvas"></canvas>
 
-<div class="progress-track">
-  <div class="progress-fill" id="progress"></div>
-</div>
-
-<nav class="nav-dots" id="navDots">
-  <div class="nav-dot active" data-label="ORIGIN" data-section="0"></div>
-  <div class="nav-dot" data-label="THE CELL" data-section="1"></div>
-  <div class="nav-dot" data-label="NEURONS" data-section="2"></div>
-  <div class="nav-dot" data-label="PREDICTION" data-section="3"></div>
-  <div class="nav-dot" data-label="DESIRE" data-section="4"></div>
-  <div class="nav-dot" data-label="ATTRACTORS" data-section="5"></div>
-  <div class="nav-dot" data-label="THE FURROW" data-section="6"></div>
-  <div class="nav-dot" data-label="TWO WAYS" data-section="7"></div>
-  <div class="nav-dot" data-label="SYNTHESIS" data-section="8"></div>
-</nav>
-
-<!-- ========== HERO ========== -->
-<header class="hero" id="sec-0">
-  <div class="hero-overline">A NEUROCOMPUTATIONAL JOURNEY</div>
-  <h1>The Shape of<br><em>Happiness</em></h1>
-  <p class="hero-sub">From the first cell to the feeling of a mind that fits its world — told through physics, biology, and one father's quiet wisdom.</p>
-  <div class="hero-scroll">SCROLL<span></span></div>
-</header>
-
-<!-- ========== CH 1: THE CELL ========== -->
-<section class="section" id="sec-1">
-  <div class="section-inner">
-    <div class="chapter-num bio">CHAPTER I — 3.8 BILLION YEARS AGO</div>
-    <h2>Every Cell Is Already <em>Intelligent</em></h2>
-    
-    <p>Before neurons, before brains, before anything we'd call a mind — there was the cell. And the cell was already computing.</p>
-    
-    <div class="diagram-3d">
-      <div class="cell-viz">
-        <div class="cell-membrane"></div>
-        <div class="cell-nucleus"></div>
-        <div class="cell-signal"></div>
-        <div class="cell-signal"></div>
-        <div class="cell-signal"></div>
-      </div>
-    </div>
-    
-    <p>A single-celled organism navigates chemical gradients, makes metabolic decisions, responds to stress, and maintains homeostasis. <strong>It's running a generative model of its local environment.<sup class="footnote-ref" id="fn1-ref" onclick="document.getElementById('fn1').classList.toggle('open')">1</sup></strong> Communication and computation aren't inventions of the brain — they're the definition of life itself.</p>
-    
-    <div class="footnote-box" id="fn1">
-      <div class="footnote-header"><span class="footnote-num">1</span> Why "generative"?</div>
-      <div class="footnote-body">
-        <p>The word <em>generative</em> is doing real work here. A generative model doesn't just store data — it can <strong>generate predictions</strong> about what it should observe next, given its current internal state.</p>
-        <p>A bacterium swimming up a glucose gradient isn't simply reacting to what's there. Its internal chemical state — receptor occupancy, metabolic enzyme concentrations, signaling cascades — collectively encode something like: <em>"the world probably looks like this right now."</em> From that internal representation, the cell effectively generates an expectation: <em>"if conditions are what I think they are, I should be sensing roughly this concentration at my membrane."</em></p>
-        <p>When the actual signal diverges from that expectation — more glucose than predicted, less oxygen than predicted — that's a prediction error. The cell updates: it adjusts gene expression, changes motility, shifts metabolic pathways.</p>
-        <p>So "generative" means: the model runs <em>forward</em>. It produces (generates) the sensory observations the system <em>should</em> be experiencing if its picture of the world is correct. The organism then compares generated expectations to actual inputs. The gap drives learning and behavior.</p>
-        <p>This is fundamentally different from a lookup table or a simple stimulus→response circuit. A generative model has an internal world-picture from which consequences flow. Even a single cell has this. The brain simply scaled it up.</p>
-      </div>
-    </div>
-    
-    <p>Every eukaryotic cell is a generative model that spawns itself by copying itself and communicating with its offspring. This is where our story begins — not with complexity, but with the simplest possible intelligence.</p>
-    
-    <div class="insight-card">
-      <h4>KEY INSIGHT</h4>
-      <p>The neuron didn't invent computation — it specialized in long-range signaling within a multicellular collective. It's a telegraph operator in a network of already-intelligent agents.</p>
-    </div>
+  <div class="progress-track">
+    <div class="progress-fill" id="progress"></div>
   </div>
-</section>
 
-<!-- ========== CH 2: NEURONS ========== -->
-<section class="section" id="sec-2">
-  <div class="section-inner">
-    <div class="chapter-num neural">CHAPTER II — 600 MILLION YEARS AGO</div>
-    <h2>The Telegraph Network <em>Awakens</em></h2>
-    
-    <p>As multicellular organisms grew, cells needed to coordinate across distances. Neurons emerged — not as something fundamentally new, but as cells that specialized in one job: <strong>passing messages fast.<sup class="footnote-ref" onclick="document.getElementById('fn2').classList.toggle('open')">2</sup></strong></p>
-    <div class="footnote-box" id="fn2">
-      <div class="footnote-header"><span class="footnote-num">2</span> Why speed changes everything</div>
-      <div class="footnote-body">
-        <p>A chemical signal diffusing between cells travels at roughly 1 mm per second. An electrical signal down a myelinated axon travels at up to <em>120 meters per second</em> — a speed increase of five orders of magnitude.</p>
-        <p>This isn't a minor upgrade. It's the difference between a multicellular organism that can only coordinate slow metabolic processes (like a sponge) and one that can react to a predator in milliseconds. Action potentials — the all-or-nothing electrical spikes neurons use — are the key innovation. And myelination (insulating the axon in fat sheaths) creates saltatory conduction: the signal literally jumps between gaps, trading material cost for speed.</p>
-        <p>But notice: the neuron isn't doing anything <em>conceptually</em> new. It's still just a cell sending a chemical message to another cell (neurotransmitters at the synapse). It just added a fast electrical relay in the middle. The computation stayed the same. The bandwidth went up.</p>
-      </div>
-    </div>
-    
-    <div class="diagram-3d">
-      <canvas class="neural-canvas" id="neuralCanvas"></canvas>
-    </div>
-    
-    <p>The genome doesn't encode the mind. There's nowhere near enough information in 20,000 genes to specify 86 billion neurons with 100 trillion synapses. What genes provide are <strong>constraints and construction rules<sup class="footnote-ref" onclick="document.getElementById('fn3').classList.toggle('open')">3</sup></strong> — grow toward gradients, fire together wire together, prune what's unused.</p>
-    <div class="footnote-box" id="fn3">
-      <div class="footnote-header"><span class="footnote-num">3</span> How 20,000 genes build 100 trillion connections</div>
-      <div class="footnote-body">
-        <p>The human genome contains roughly 20,000 protein-coding genes. The brain has ~100 trillion synaptic connections. You cannot specify each connection genetically — there's an information shortfall of many orders of magnitude.</p>
-        <p>Instead, genes provide <em>construction rules</em>: chemical gradients that axons follow (like roads), adhesion molecules that make certain neurons prefer connecting to each other, and activity-dependent plasticity rules (Hebbian learning — "neurons that fire together wire together"). The actual wiring diagram emerges from these rules interacting with sensory experience during development.</p>
-        <p>This is why early childhood experience physically shapes brain architecture. It's not that genes specify the map. Genes specify the rules for <em>drawing</em> the map, and the territory itself fills in the details. The brain is less like a blueprint being executed and more like a city growing organically around geography and traffic patterns.</p>
-      </div>
-    </div>
-    
-    <p>The actual structure emerges from the interaction between minimal rules and the environment. The brain is self-organizing, not pre-specified. This distinction matters enormously for understanding happiness.</p>
-  </div>
-</section>
+  <nav class="nav-dots" id="navDots">
+    <div class="nav-dot active" data-label="ORIGIN" data-section="0"></div>
+    <div class="nav-dot" data-label="THE CELL" data-section="1"></div>
+    <div class="nav-dot" data-label="NEURONS" data-section="2"></div>
+    <div class="nav-dot" data-label="PREDICTION" data-section="3"></div>
+    <div class="nav-dot" data-label="DESIRE" data-section="4"></div>
+    <div class="nav-dot" data-label="ATTRACTORS" data-section="5"></div>
+    <div class="nav-dot" data-label="THE FURROW" data-section="6"></div>
+    <div class="nav-dot" data-label="TWO WAYS" data-section="7"></div>
+    <div class="nav-dot" data-label="SYNTHESIS" data-section="8"></div>
+  </nav>
 
-<!-- ========== CH 3: PREDICTION MACHINE ========== -->
-<section class="section" id="sec-3">
-  <div class="section-inner">
-    <div class="chapter-num cyan">CHAPTER III — THE PREDICTION ENGINE</div>
-    <h2>Your Brain Doesn't Seek Pleasure.<br><em>It Minimizes Surprise.</em></h2>
-    
-    <p>The dominant model of happiness — "seek pleasure, avoid pain" — is computationally naive. What the brain actually does is far more elegant.</p>
-    
-    <p>Dopamine neurons don't encode "pleasure." They encode <strong>reward prediction errors<sup class="footnote-ref" onclick="document.getElementById('fn4').classList.toggle('open')">4</sup></strong> — the difference between what you expected and what happened.</p>
-    <div class="footnote-box" id="fn4">
-      <div class="footnote-header"><span class="footnote-num">4</span> The Schultz experiments that changed everything</div>
-      <div class="footnote-body">
-        <p>In the 1990s, Wolfram Schultz recorded from dopamine neurons in monkeys and discovered something that overturned the "dopamine = pleasure" story. When a monkey received an <em>unexpected</em> reward (juice), dopamine neurons fired intensely. But once the monkey <em>learned</em> to predict the reward (a light predicts juice), dopamine stopped firing to the juice itself — and instead fired to the <em>predictive cue</em> (the light).</p>
-        <p>Most revealing: if the predicted reward <em>didn't</em> arrive, dopamine activity dropped <em>below</em> baseline at exactly the moment the reward was expected. The neurons were computing: <em>reality minus expectation</em>.</p>
-        <p>This is mathematically identical to the temporal-difference (TD) learning algorithm in machine learning — developed independently by computer scientists. The brain was running reinforcement learning before we invented it. Dopamine doesn't signal "this is good." It signals "this is <em>better or worse than I predicted</em>." That distinction is the foundation of everything that follows.</p>
-      </div>
-    </div>
-    <p>Happiness isn't about maximizing reward. It's about operating in an environment where your predictions are good.</p>
-    
-    <div class="diagram-3d">
-      <div class="prediction-viz" id="predViz">
-        <div class="pred-bar-group">
-          <div class="pred-bar" style="height:120px; background: linear-gradient(to top, var(--accent-cyan), rgba(34,211,238,0.3))"></div>
-          <div class="pred-label">Expected</div>
-        </div>
-        <div class="pred-bar-group">
-          <div class="pred-bar" style="height:160px; background: linear-gradient(to top, var(--accent-bio), rgba(0,229,160,0.3))"></div>
-          <div class="pred-label">Received</div>
-        </div>
-        <div class="pred-bar-group">
-          <div class="pred-bar" style="height:40px; background: linear-gradient(to top, var(--accent-warm), rgba(245,158,11,0.3))"></div>
-          <div class="pred-label">+Error ☺</div>
+  <!-- ========== HERO ========== -->
+  <header class="hero" id="sec-0">
+    <div class="hero-overline">A NEUROCOMPUTATIONAL JOURNEY</div>
+    <h1>The Shape of<br><em>Happiness</em></h1>
+    <p class="hero-sub">From the first cell to the feeling of a mind that fits its world — told through physics,
+      biology, and one biologist's father's quiet wisdom.</p>
+    <div class="hero-scroll">SCROLL<span></span></div>
+  </header>
+
+  <!-- ========== CH 1: THE CELL ========== -->
+  <section class="section" id="sec-1">
+    <div class="section-inner">
+      <div class="chapter-num bio">CHAPTER I — 3.8 BILLION YEARS AGO</div>
+      <h2>Every Cell Is Already <em>Intelligent</em></h2>
+
+      <p>Before neurons, before brains, before anything we'd call a mind — there was the cell. And the cell was already
+        computing.</p>
+
+      <div class="diagram-3d">
+        <div class="cell-viz">
+          <div class="cell-membrane"></div>
+          <div class="cell-nucleus"></div>
+          <div class="cell-signal"></div>
+          <div class="cell-signal"></div>
+          <div class="cell-signal"></div>
         </div>
       </div>
-    </div>
-    
-    <p>The brain runs parallel value computations across different time horizons. Short-term rewards in the ventral striatum, abstract values in the orbitofrontal cortex, long-term plans in the prefrontal cortex.</p>
-    
-    <div class="timescale-viz" id="timescaleViz">
-      <div class="timescale-row">
-        <div class="ts-label">Immediate</div>
-        <div class="ts-bar-track"><div class="ts-bar-fill" data-width="85" style="background: var(--accent-bio);"></div></div>
-      </div>
-      <div class="timescale-row">
-        <div class="ts-label">Medium</div>
-        <div class="ts-bar-track"><div class="ts-bar-fill" data-width="78" style="background: var(--accent-neural);"></div></div>
-      </div>
-      <div class="timescale-row">
-        <div class="ts-label">Long-term</div>
-        <div class="ts-bar-track"><div class="ts-bar-fill" data-width="82" style="background: var(--accent-cyan);"></div></div>
-      </div>
-    </div>
-    
-    <p style="margin-top:24px"><strong>Deep happiness — eudaimonia — is when these timescales align.<sup class="footnote-ref" onclick="document.getElementById('fn5').classList.toggle('open')">5</sup></strong></p>
-    <div class="footnote-box" id="fn5">
-      <div class="footnote-header"><span class="footnote-num">5</span> Cross-timescale coherence and the ACC</div>
-      <div class="footnote-body">
-        <p>Your brain runs at least three parallel value systems. The <em>ventral striatum</em> evaluates immediate rewards (this chocolate tastes good). The <em>orbitofrontal cortex</em> computes contextual value (but I'm trying to eat better). The <em>prefrontal cortex</em> simulates long-horizon outcomes (my health in 20 years).</p>
-        <p>When these systems disagree, the <em>anterior cingulate cortex</em> (ACC) lights up — it's a conflict monitor. That ACC activation feels like guilt, unease, or internal friction. You're doing something your short-term system wants but your long-term system opposes, or vice versa.</p>
-        <p>Eudaimonia — Aristotle's "deep flourishing" — corresponds to states where all three timescales point in the same direction. Your daily actions serve your monthly goals serve your life purpose. The ACC goes quiet. The system stops fighting itself. That absence of internal conflict has a distinctive phenomenology: clarity, flow, meaning. It's not the spike of pleasure. It's the steady hum of coherence.</p>
-      </div>
-    </div>
-    <p>When your daily actions are coherent with your long-term values, internal conflict signals drop. The system isn't fighting itself.</p>
-    
-    <div class="insight-card">
-      <h4>THE FREE ENERGY PRINCIPLE</h4>
-      <p>Karl Friston's framework: the brain is a prediction machine minimizing surprise (free energy). Happiness is the state where your generative model of the world is well-calibrated — prediction errors are low, the model compresses experience efficiently, and you have high confidence in navigating future states.</p>
-    </div>
-  </div>
-</section>
 
-<!-- ========== CH 4: DESIRE ========== -->
-<section class="section" id="sec-4">
-  <div class="section-inner">
-    <div class="chapter-num warm">CHAPTER IV — THE TRAP OF DESIRE</div>
-    <h2>A Contract To Be <em>Unhappy</em></h2>
-    
-    <div class="quote-block">
-      <p>"Desire is a contract with yourself to be unhappy until fulfilled."</p>
-      <div class="quote-attr">— NAVAL RAVIKANT</div>
-    </div>
-    <div class="diagram-3d">
-      <svg class="desire-viz" viewBox="0 0 500 220" style="width:100%;height:100%;">
-        <!-- Baseline before desire -->
-        <line x1="40" y1="150" x2="200" y2="150" stroke="#8a8680" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>
-        <text x="42" y="143" fill="#8a8680" font-family="JetBrains Mono, monospace" font-size="8" letter-spacing="1">BASELINE</text>
-        
-        <!-- Current reality line (stays flat) -->
-        <line x1="40" y1="150" x2="460" y2="150" stroke="#22d3ee" stroke-width="1.5" opacity="0.4"/>
-        <text x="420" y="165" fill="#22d3ee" font-family="JetBrains Mono, monospace" font-size="7" letter-spacing="1" opacity="0.7">REALITY</text>
-        
-        <!-- Desire shifts expectation upward -->
-        <path d="M200 150 C220 150 230 80 250 80 L460 80" fill="none" stroke="#f59e0b" stroke-width="2" opacity="0.8">
-          <animate attributeName="opacity" values="0;0.8;0.8" dur="3s" fill="freeze"/>
-        </path>
-        <text x="420" y="73" fill="#f59e0b" font-family="JetBrains Mono, monospace" font-size="7" letter-spacing="1" opacity="0">
-          EXPECTATION
-          <animate attributeName="opacity" values="0;0;0.8" dur="3s" fill="freeze"/>
-        </text>
-        
-        <!-- The gap = suffering -->
-        <rect x="340" y="80" width="2" height="70" fill="#f472b6" opacity="0">
-          <animate attributeName="opacity" values="0;0;0.6" dur="3s" fill="freeze"/>
-        </rect>
-        <line x1="336" y1="80" x2="348" y2="80" stroke="#f472b6" stroke-width="1" opacity="0">
-          <animate attributeName="opacity" values="0;0;0.6" dur="3s" fill="freeze"/>
-        </line>
-        <line x1="336" y1="150" x2="348" y2="150" stroke="#f472b6" stroke-width="1" opacity="0">
-          <animate attributeName="opacity" values="0;0;0.6" dur="3s" fill="freeze"/>
-        </line>
-        <text x="356" y="120" fill="#f472b6" font-family="JetBrains Mono, monospace" font-size="8" letter-spacing="1" opacity="0">
-          GAP = SUFFERING
-          <animate attributeName="opacity" values="0;0;0;0.9" dur="4s" fill="freeze"/>
-        </text>
-        
-        <!-- Moment of desire formation -->
-        <circle cx="200" cy="150" r="4" fill="#f59e0b" opacity="0">
-          <animate attributeName="opacity" values="0;0;1;0.6" dur="3s" fill="freeze"/>
-          <animate attributeName="r" values="4;4;8;4" dur="3s" fill="freeze"/>
-        </circle>
-        <text x="178" y="175" fill="#f59e0b" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle" opacity="0">
-          DESIRE FORMS
-          <animate attributeName="opacity" values="0;0;0.8;0.5" dur="3s" fill="freeze"/>
-        </text>
-        
-        <!-- Pulsing error signal -->
-        <rect x="250" y="81" width="200" height="68" fill="url(#errorGrad)" opacity="0">
-          <animate attributeName="opacity" values="0;0;0;0.15;0.05;0.15;0.05;0.15" dur="6s" repeatCount="indefinite"/>
-        </rect>
-        <defs>
-          <linearGradient id="errorGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#f59e0b"/>
-            <stop offset="100%" stop-color="#f472b6"/>
-          </linearGradient>
-        </defs>
-      </svg>
-    </div>
+      <p>A single-celled organism navigates chemical gradients, makes metabolic decisions, responds to stress, and
+        maintains homeostasis. <strong>It's running a generative model of its local environment.<sup
+            class="footnote-ref" id="fn1-ref"
+            onclick="document.getElementById('fn1').classList.toggle('open')">1</sup></strong> Communication and
+        computation aren't inventions of the brain — they're the definition of life itself.</p>
 
-    
-    <p>This maps perfectly onto the prediction error framework. When you form a desire, you update your expected future state to include the desired outcome. From that moment, your brain computes a <strong>persistent negative prediction error<sup class="footnote-ref" onclick="document.getElementById('fn6').classList.toggle('open')">6</sup></strong> — the gap between where you are and where your model says you "should" be.</p>
-    <div class="footnote-box" id="fn6">
-      <div class="footnote-header"><span class="footnote-num">6</span> How desire rewires your baseline</div>
-      <div class="footnote-body">
-        <p>Before you want something, your predictive model has a certain baseline: <em>"this is the world."</em> Prediction errors are computed against that baseline. If something unexpectedly good happens, positive error. Fine.</p>
-        <p>The moment you form a desire — say, a promotion — your model updates to include the desired state as <em>expected</em>. Now the absence of the promotion isn't a neutral state. It's a persistent negative prediction error. Your system continuously computes: <em>expected state (promoted) minus current state (not promoted) = negative delta</em>. That negative delta is registered by the habenula and dorsal ACC as a low-grade aversive signal. It's not acute pain. It's a background hum of insufficiency.</p>
-        <p>This is why people can be objectively well-off and subjectively miserable. Their prediction errors aren't computed against some absolute standard. They're computed against their own self-generated expectations. Every desire you form raises the bar against which reality is measured.</p>
+      <div class="footnote-box" id="fn1">
+        <div class="footnote-header"><span class="footnote-num">1</span> Why "generative"?</div>
+        <div class="footnote-body">
+          <p>The word <em>generative</em> is doing real work here. A generative model doesn't just store data — it can
+            <strong>generate predictions</strong> about what it should observe next, given its current internal state.
+          </p>
+          <p>A bacterium swimming up a glucose gradient isn't simply reacting to what's there. Its internal chemical
+            state — receptor occupancy, metabolic enzyme concentrations, signaling cascades — collectively encode
+            something like: <em>"the world probably looks like this right now."</em> From that internal representation,
+            the cell effectively generates an expectation: <em>"if conditions are what I think they are, I should be
+              sensing roughly this concentration at my membrane."</em></p>
+          <p>When the actual signal diverges from that expectation — more glucose than predicted, less oxygen than
+            predicted — that's a prediction error. The cell updates: it adjusts gene expression, changes motility,
+            shifts metabolic pathways.</p>
+          <p>So "generative" means: the model runs <em>forward</em>. It produces (generates) the sensory observations
+            the system <em>should</em> be experiencing if its picture of the world is correct. The organism then
+            compares generated expectations to actual inputs. The gap drives learning and behavior.</p>
+          <p>This is fundamentally different from a lookup table or a simple stimulus→response circuit. A generative
+            model has an internal world-picture from which consequences flow. Even a single cell has this. The brain
+            simply scaled it up.</p>
+        </div>
       </div>
-    </div>
-    
-    <p>Every moment the desire remains unfulfilled, the system registers a low-grade error signal. <strong>You've voluntarily shifted your reference point, and now reality perpetually falls short.<sup class="footnote-ref" onclick="document.getElementById('fn7').classList.toggle('open')">7</sup></strong></p>
-    <div class="footnote-box" id="fn7">
-      <div class="footnote-header"><span class="footnote-num">7</span> Prospect theory and hedonic adaptation</div>
-      <div class="footnote-body">
-        <p>Kahneman and Tversky's prospect theory showed that humans don't evaluate outcomes in absolute terms — they evaluate them <em>relative to a reference point</em>. Gains and losses are computed from wherever you currently stand, and losses loom larger than equivalent gains (loss aversion, roughly 2:1).</p>
-        <p>Now combine this with hedonic adaptation: any sustained change in circumstances gets absorbed into your new baseline within weeks to months. Lottery winners return to baseline happiness. Paraplegics return closer to baseline than anyone predicts.</p>
-        <p>The reference point is a moving target. And desire pushes it <em>forward</em> — you begin evaluating your current reality against an imagined future state. Since losses loom larger, the gap between "where I am" and "where I want to be" registers as disproportionately painful compared to the pleasure you'll actually get upon arrival. The architecture guarantees disappointment.</p>
-      </div>
-    </div>
-    
-    <p>The dopaminergic system wasn't designed for satisfaction — it was designed for pursuit. An organism that reaches contentment stops exploring and gets outcompeted. The architecture is biased toward perpetual wanting.</p>
-    
-    <div class="insight-card">
-      <h4>BUDDHISM MEETS FRISTON</h4>
-      <p>The Buddhist concept of <em>tanha</em> (craving as the root of suffering) is nearly identical to the free energy formulation. Every desire is a new prior that increases the divergence between your generative model and reality. More desires = more free energy = more surprise = more suffering. Meditation reduces the weight on acquired priors, letting the system settle toward lower free energy without needing the world to change.</p>
-    </div>
-    
-    <p>The profound irony: <strong>desire borrows unhappiness from the future and makes you experience it now<sup class="footnote-ref" onclick="document.getElementById('fn8').classList.toggle('open')">8</sup></strong>, in hopes that fulfillment will zero out the debt. But fulfillment triggers rebalancing and new desires. The only way to win is to be selective about which contracts you sign.</p>
-    <div class="footnote-box" id="fn8">
-      <div class="footnote-header"><span class="footnote-num">8</span> Temporal borrowing and the dopamine debt</div>
-      <div class="footnote-body">
-        <p>This isn't just a metaphor — it's a literal description of dopaminergic dynamics. When you anticipate a future reward, dopamine fires <em>now</em>, at the moment of anticipation. That dopamine mobilizes action (motivation) but it also creates a physiological debt: the system will need to "pay back" that activation.</p>
-        <p>If the reward arrives and matches expectation, the system balances — but you don't get a <em>second</em> dopamine hit, because the reward was already predicted. The pleasure was pre-spent. If the reward exceeds expectation, you get a small surplus. If it falls short, you experience a below-baseline dip — active disappointment, not just neutral absence.</p>
-        <p>Chronic desire is therefore a state of continuous dopaminergic borrowing. You're spending future reward-signal now as motivation, and the books never quite balance because hedonic adaptation keeps recalibrating the baseline upward. Addictive substances exploit this same architecture by creating massive anticipatory dopamine spikes that the natural reward can never repay — hence tolerance and withdrawal.</p>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- ========== CH 5: ATTRACTORS ========== -->
-<section class="section" id="sec-5">
-  <div class="section-inner">
-    <div class="chapter-num bio">CHAPTER V — UNIVERSALITY</div>
-    <h2>The Attractors of <em>Wellbeing</em></h2>
-    
-    <p>Here's the deepest insight, and it comes not from neuroscience but from physics: <strong>totally different microscopic structures can lead to the same macroscopic behavior<sup class="footnote-ref" onclick="document.getElementById('fn9').classList.toggle('open')">9</sup></strong> — if the environmental constraints enforce this and the system is flexible enough.</p>
-    <div class="footnote-box" id="fn9">
-      <div class="footnote-header"><span class="footnote-num">9</span> Universality in physics</div>
-      <div class="footnote-body">
-        <p>Universality is one of the deepest ideas in physics. Water boiling and iron losing its magnetism are completely different physical systems — different particles, different forces, different scales. Yet near their critical points, they exhibit <em>identical</em> mathematical behavior. The exponents describing how fluctuations scale, how correlations decay — the same numbers appear.</p>
-        <p>Kenneth Wilson's renormalization group explains why: when you "zoom out" from microscopic details, the irrelevant details wash away and only the system's fundamental symmetries and dimensionality matter. Completely different microscopic substrates converge on the same macroscopic behavior because the <em>constraints</em> — not the components — determine the outcome.</p>
-        <p>Applied to biology: neurons made of carbon, silicon chips, or hypothetical alien chemistry could all converge on the same functional patterns (circadian rhythms, prediction error minimization, social bonding) because the constraints — thermodynamics, information theory, the structure of the physical environment — carve out the same basins of attraction regardless of substrate.</p>
-      </div>
-    </div>
-    
-    <div class="diagram-3d">
-      <div class="attractor-container" id="attractorViz">
-        <!-- Generated by JS -->
-      </div>
-    </div>
-    
-    <p>This is universality. And it reframes everything about happiness.</p>
-    
-    <p>When people thrive on circadian rhythms, whole foods, family bonds, and personal growth — the explanation isn't "genes coded for it." The deeper explanation is: <strong>given the physical and thermodynamic constraints any embodied information-processing system faces on Earth, these patterns are attractors.<sup class="footnote-ref" onclick="document.getElementById('fn10').classList.toggle('open')">10</sup></strong></p>
-    <div class="footnote-box" id="fn10">
-      <div class="footnote-header"><span class="footnote-num">10</span> Dissipative structures and Prigogine</div>
-      <div class="footnote-body">
-        <p>Ilya Prigogine won the Nobel Prize for showing that systems far from thermodynamic equilibrium can spontaneously organize into stable patterns — <em>dissipative structures</em>. A candle flame, a hurricane, a living cell: all maintain order by continuously dissipating energy. They're not static. They're dynamic patterns that persist because energy keeps flowing through them.</p>
-        <p>An organism is a dissipative structure. It maintains low internal entropy by exporting high entropy (heat, waste) into the environment. To sustain this, it needs a steady energy throughput, which means it must synchronize with environmental energy sources — hence circadian rhythms on a rotating planet. It must predict threats to its energy supply — hence a nervous system. It must reproduce before it degrades — hence the deep drive toward offspring.</p>
-        <p>These aren't "choices" evolution made. They're thermodynamic inevitabilities for any self-maintaining dissipative structure in Earth-like conditions. The attractor basin isn't biological. It's physical.</p>
-      </div>
-    </div>
-    
-    <p>Any organism managing energy budgets on a rotating planet will converge on circadian-like cycles. Any system producing offspring that need extended learning will converge on cooperative caregiving. Not because of shared genes, but because the math demands it.</p>
-    
-    <div class="insight-card">
-      <h4>WHY MODERN LIFE FEELS OFF</h4>
-      <p>Materially comfortable people can feel inexplicably wrong because they've satisfied shallow, recent priors (financial security, stimulation, convenience) while systematically violating deep ones (circadian rhythms, nutritional coherence, tribal belonging, physical exertion, intergenerational purpose). The surface reward system says "fine" while ancient homeostatic models scream prediction errors.</p>
-    </div>
-  </div>
-</section>
+      <p>Every eukaryotic cell is a generative model that spawns itself by copying itself and communicating with its
+        offspring. This is where our story begins — not with complexity, but with the simplest possible intelligence.
+      </p>
 
-<!-- ========== CH 6: THE FURROW ========== -->
-<section class="section" id="sec-6">
-  <div class="section-inner">
-    <div class="chapter-num coral">CHAPTER VI — THE EVOLUTIONARY FURROW</div>
-    <h2>Stay in the <em>Furrow</em></h2>
-    <div class="diagram-3d">
-      <svg class="furrow-viz" viewBox="0 0 500 240" style="width:100%;height:100%;">
-        <!-- Landscape / energy surface -->
-        <path d="M0 60 Q60 55 100 80 Q140 110 170 140 Q200 170 250 180 Q300 170 330 140 Q360 110 400 80 Q440 55 500 60" 
-              fill="none" stroke="rgba(244,114,182,0.2)" stroke-width="1"/>
-        <path d="M0 70 Q60 65 100 90 Q140 120 170 150 Q200 180 250 190 Q300 180 330 150 Q360 120 400 90 Q440 65 500 70" 
-              fill="none" stroke="rgba(244,114,182,0.15)" stroke-width="1"/>
-        <path d="M0 80 Q60 75 100 100 Q140 130 170 160 Q200 190 250 200 Q300 190 330 160 Q360 130 400 100 Q440 75 500 80" 
-              fill="none" stroke="rgba(244,114,182,0.1)" stroke-width="1"/>
-        
-        <!-- The furrow (attractor groove) -->
-        <path d="M0 50 Q60 45 100 70 Q140 100 170 130 Q200 165 250 178 Q300 165 330 130 Q360 100 400 70 Q440 45 500 50" 
-              fill="none" stroke="#f472b6" stroke-width="2" opacity="0.6"/>
-        
-        <!-- Fill the basin -->
-        <path d="M140 100 Q170 130 200 165 Q225 178 250 182 Q275 178 300 165 Q330 130 360 100 L360 102 Q330 132 300 167 Q275 180 250 184 Q225 180 200 167 Q170 132 140 102 Z"
-              fill="rgba(244,114,182,0.06)"/>
-        
-        <!-- Ball settling into furrow -->
-        <circle r="7" fill="#f472b6" opacity="0.9">
-          <animateMotion dur="5s" repeatCount="indefinite" 
-            path="M150 95 Q180 120 210 150 Q230 170 250 175 Q260 172 255 176 Q250 178 248 176 Q250 177 250 177"/>
-          <animate attributeName="r" values="7;6;7;6;7" dur="5s" repeatCount="indefinite"/>
-        </circle>
-        <!-- Glow on ball -->
-        <circle r="14" fill="none" stroke="#f472b6" opacity="0">
-          <animateMotion dur="5s" repeatCount="indefinite" 
-            path="M150 95 Q180 120 210 150 Q230 170 250 175 Q260 172 255 176 Q250 178 248 176 Q250 177 250 177"/>
-          <animate attributeName="opacity" values="0.3;0.1;0;0.1;0.3" dur="5s" repeatCount="indefinite"/>
-        </circle>
-        
-        <!-- Labels -->
-        <text x="250" y="210" fill="#f472b6" font-family="JetBrains Mono, monospace" font-size="8" text-anchor="middle" letter-spacing="2" opacity="0.6">EVOLUTIONARY FURROW</text>
-        <text x="250" y="222" fill="#4a4844" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle" letter-spacing="1">LOWEST ENERGY PATH</text>
-        
-        <!-- Energy arrows on sides -->
-        <path d="M110 75 L125 68" fill="none" stroke="#8a8680" stroke-width="0.8" marker-end="url(#arrowDim)"/>
-        <path d="M390 75 L375 68" fill="none" stroke="#8a8680" stroke-width="0.8" marker-end="url(#arrowDim)"/>
-        <text x="95" y="65" fill="#4a4844" font-family="JetBrains Mono, monospace" font-size="6" letter-spacing="1">HIGH ENERGY</text>
-        <text x="370" y="65" fill="#4a4844" font-family="JetBrains Mono, monospace" font-size="6" letter-spacing="1">HIGH ENERGY</text>
-        
-        <defs>
-          <marker id="arrowDim" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
-            <path d="M0,0 L6,3 L0,6 Z" fill="#8a8680"/>
-          </marker>
-        </defs>
-      </svg>
-    </div>
-
-    
-    <p>For 25 years, a biologist told his father the same thing: <strong>"Stay in the evolutionary furrow."<sup class="footnote-ref" onclick="document.getElementById('fn11').classList.toggle('open')">11</sup></strong></p>
-    <div class="footnote-box" id="fn11">
-      <div class="footnote-header"><span class="footnote-num">11</span> Attractor basins in dynamical systems</div>
-      <div class="footnote-body">
-        <p>In dynamical systems theory, an <em>attractor</em> is a state (or set of states) that a system naturally evolves toward over time. An <em>attractor basin</em> is the region of initial conditions from which the system will flow toward that attractor — like water flowing into a valley regardless of where on the hillside it starts.</p>
-        <p>"Furrow" captures this with startling precision. A furrow in soil channels water. It doesn't force the water to flow — the water flows naturally because the landscape geometry makes it the lowest-energy path. You can pour water on any part of the field, and if it lands within the furrow's basin, it ends up in the same channel.</p>
-        <p>The metaphor extends further: you <em>can</em> push water out of the furrow. It takes energy. And the moment you stop pushing, it flows back. This is exactly what happens when people fight deep biological patterns — they can sustain it with willpower (energy expenditure), but the attractor keeps pulling. The system "wants" to return to the basin. Wellbeing is what it feels like to stop fighting the landscape.</p>
+      <div class="insight-card">
+        <h4>KEY INSIGHT</h4>
+        <p>The neuron didn't invent computation — it specialized in long-range signaling within a multicellular
+          collective. It's a telegraph operator in a network of already-intelligent agents.</p>
       </div>
     </div>
-    <p>The phrase came from intuition before the formal frameworks existed — before he'd generalized chaos theory and attractor basins into a worldview.</p>
-    
-    <p>A furrow is a groove that channels flow. Things naturally settle into it. You can fight against it, but at a cost. It was a remarkably precise metaphor for an attractor basin — coined from pure biological intuition, decades before the math caught up.</p>
-    
-    <p>Intuition, through this lens, isn't mystical. It's your generative model having learned a compressed representation of deep statistical regularities <strong>before</strong> the conscious, verbal system can explain why. The pattern recognition runs ahead of the explanation.</p>
-    
-    <p>Yet the same biologist — rigorous, trained in molecular biology, armed with Occam's razor and falsificationism — dismissed supplementation as mostly unnecessary. He was applying perfect epistemology inside a system with corrupted inputs. Nutrition science, compromised by decades of industry funding and methodological failures, had constrained his hypothesis space.</p>
-    
-    <p><strong>His father, the engineer, saw through it.<sup class="footnote-ref" onclick="document.getElementById('fn12').classList.toggle('open')">12</sup></strong></p>
-    <div class="footnote-box" id="fn12">
-      <div class="footnote-header"><span class="footnote-num">12</span> First-person vs. third-person epistemology</div>
-      <div class="footnote-body">
-        <p>There are two fundamentally different ways to know something. <em>Third-person knowledge</em> comes from external observation, controlled experiments, peer-reviewed literature — the scientific method as an institution. <em>First-person knowledge</em> comes from direct intervention on your own system and observing the result — an n-of-1 trial.</p>
-        <p>The engineer's approach — try cod liver oil, notice joints feel better, keep taking it — is a remarkably efficient Bayesian update. The signal-to-noise ratio is high because you have privileged access to your own interoceptive state (how you <em>feel</em>), the latency between intervention and observation is short, and the relevance is maximal (it's literally your own body).</p>
-        <p>The biologist's approach — check meta-analyses, evaluate RCTs, defer to consensus — is more powerful for population-level truths but vulnerable to systemic corruption. When an entire field has been captured by industry funding, when key studies were designed to show null results, when the Overton window of acceptable hypotheses has been artificially narrowed — the third-person system feeds you confidently wrong answers. The engineer, reading his own body, bypassed the corrupted institution entirely.</p>
+  </section>
+
+  <!-- ========== CH 2: NEURONS ========== -->
+  <section class="section" id="sec-2">
+    <div class="section-inner">
+      <div class="chapter-num neural">CHAPTER II — 600 MILLION YEARS AGO</div>
+      <h2>The Telegraph Network <em>Awakens</em></h2>
+
+      <p>As multicellular organisms grew, cells needed to coordinate across distances. Neurons emerged — not as
+        something fundamentally new, but as cells that specialized in one job: <strong>passing messages fast.<sup
+            class="footnote-ref" onclick="document.getElementById('fn2').classList.toggle('open')">➔</sup></strong></p>
+      <div class="footnote-box" id="fn2">
+        <div class="footnote-header"><span class="footnote-num">➔</span> Why speed changes everything</div>
+        <div class="footnote-body">
+          <p>A chemical signal diffusing between cells travels at roughly 1 mm per second. An electrical signal down a
+            myelinated axon travels at up to <em>120 meters per second</em> — a speed increase of five orders of
+            magnitude.</p>
+          <p>This isn't a minor upgrade. It's the difference between a multicellular organism that can only coordinate
+            slow metabolic processes (like a sponge) and one that can react to a predator in milliseconds. Action
+            potentials — the all-or-nothing electrical spikes neurons use — are the key innovation. And myelination
+            (insulating the axon in fat sheaths) creates saltatory conduction: the signal literally jumps between gaps,
+            trading material cost for speed.</p>
+          <p>But notice: the neuron isn't doing anything <em>conceptually</em> new. It's still just a cell sending a
+            chemical message to another cell (neurotransmitters at the synapse). It just added a fast electrical relay
+            in the middle. The computation stayed the same. The bandwidth went up.</p>
+        </div>
+      </div>
+
+      <div class="diagram-3d">
+        <canvas class="neural-canvas" id="neuralCanvas"></canvas>
+      </div>
+
+      <p>The genome doesn't encode the mind. There's nowhere near enough information in 20,000 genes to specify 86
+        billion neurons with 100 trillion synapses. What genes provide are <strong>constraints and construction
+          rules<sup class="footnote-ref"
+            onclick="document.getElementById('fn3').classList.toggle('open')">⚡</sup></strong> — grow toward gradients,
+        fire together wire together, prune what's unused.</p>
+      <div class="footnote-box" id="fn3">
+        <div class="footnote-header"><span class="footnote-num">⚡</span> How 20,000 genes build 100 trillion connections
+        </div>
+        <div class="footnote-body">
+          <p>The human genome contains roughly 20,000 protein-coding genes. The brain has ~100 trillion synaptic
+            connections. You cannot specify each connection genetically — there's an information shortfall of many
+            orders of magnitude.</p>
+          <p>Instead, genes provide <em>construction rules</em>: chemical gradients that axons follow (like roads),
+            adhesion molecules that make certain neurons prefer connecting to each other, and activity-dependent
+            plasticity rules (Hebbian learning — "neurons that fire together wire together"). The actual wiring diagram
+            emerges from these rules interacting with sensory experience during development.</p>
+          <p>This is why early childhood experience physically shapes brain architecture. It's not that genes specify
+            the map. Genes specify the rules for <em>drawing</em> the map, and the territory itself fills in the
+            details. The brain is less like a blueprint being executed and more like a city growing organically around
+            geography and traffic patterns.</p>
+        </div>
+      </div>
+
+      <p>The actual structure emerges from the interaction between minimal rules and the environment. The brain is
+        self-organizing, not pre-specified. This distinction matters enormously for understanding happiness.</p>
+    </div>
+  </section>
+
+  <!-- ========== CH 3: PREDICTION MACHINE ========== -->
+  <section class="section" id="sec-3">
+    <div class="section-inner">
+      <div class="chapter-num cyan">CHAPTER III — THE PREDICTION ENGINE</div>
+      <h2>Your Brain Doesn't Seek Pleasure.<br><em>It Minimizes Surprise.</em></h2>
+
+      <p>The dominant model of happiness — "seek pleasure, avoid pain" — is computationally naive. What the brain
+        actually does is far more elegant.</p>
+
+      <p>Dopamine neurons don't encode "pleasure." They encode <strong>reward prediction errors<sup class="footnote-ref"
+            onclick="document.getElementById('fn4').classList.toggle('open')">✷</sup></strong> — the difference between
+        what you expected and what happened.</p>
+      <div class="footnote-box" id="fn4">
+        <div class="footnote-header"><span class="footnote-num">✷</span> The Schultz experiments that changed everything
+        </div>
+        <div class="footnote-body">
+          <p>In the 1990s, Wolfram Schultz recorded from dopamine neurons in monkeys and discovered something that
+            overturned the "dopamine = pleasure" story. When a monkey received an <em>unexpected</em> reward (juice),
+            dopamine neurons fired intensely. But once the monkey <em>learned</em> to predict the reward (a light
+            predicts juice), dopamine stopped firing to the juice itself — and instead fired to the <em>predictive
+              cue</em> (the light).</p>
+          <p>Most revealing: if the predicted reward <em>didn't</em> arrive, dopamine activity dropped <em>below</em>
+            baseline at exactly the moment the reward was expected. The neurons were computing: <em>reality minus
+              expectation</em>.</p>
+          <p>This is mathematically identical to the temporal-difference (TD) learning algorithm in machine learning —
+            developed independently by computer scientists. The brain was running reinforcement learning before we
+            invented it. Dopamine doesn't signal "this is good." It signals "this is <em>better or worse than I
+              predicted</em>." That distinction is the foundation of everything that follows.</p>
+        </div>
+      </div>
+      <p>Happiness isn't about maximizing reward. It's about operating in an environment where your predictions are
+        good.</p>
+
+      <div class="diagram-3d">
+        <div class="prediction-viz" id="predViz">
+          <div class="pred-bar-group">
+            <div class="pred-bar"
+              style="height:120px; background: linear-gradient(to top, var(--accent-cyan), rgba(34,211,238,0.3))"></div>
+            <div class="pred-label">Expected</div>
+          </div>
+          <div class="pred-bar-group">
+            <div class="pred-bar"
+              style="height:160px; background: linear-gradient(to top, var(--accent-bio), rgba(0,229,160,0.3))"></div>
+            <div class="pred-label">Received</div>
+          </div>
+          <div class="pred-bar-group">
+            <div class="pred-bar"
+              style="height:40px; background: linear-gradient(to top, var(--accent-warm), rgba(245,158,11,0.3))"></div>
+            <div class="pred-label">+Error ☺</div>
+          </div>
+        </div>
+      </div>
+
+      <p>The brain runs parallel value computations across different time horizons. Short-term rewards in the ventral
+        striatum, abstract values in the orbitofrontal cortex, long-term plans in the prefrontal cortex.</p>
+
+      <div class="timescale-viz" id="timescaleViz">
+        <div class="timescale-row">
+          <div class="ts-label">Immediate</div>
+          <div class="ts-bar-track">
+            <div class="ts-bar-fill" data-width="85" style="background: var(--accent-bio);"></div>
+          </div>
+        </div>
+        <div class="timescale-row">
+          <div class="ts-label">Medium</div>
+          <div class="ts-bar-track">
+            <div class="ts-bar-fill" data-width="78" style="background: var(--accent-neural);"></div>
+          </div>
+        </div>
+        <div class="timescale-row">
+          <div class="ts-label">Long-term</div>
+          <div class="ts-bar-track">
+            <div class="ts-bar-fill" data-width="82" style="background: var(--accent-cyan);"></div>
+          </div>
+        </div>
+      </div>
+
+      <p style="margin-top:24px"><strong>Deep happiness — eudaimonia — is when these timescales align.<sup
+            class="footnote-ref" onclick="document.getElementById('fn5').classList.toggle('open')">✦</sup></strong></p>
+      <div class="footnote-box" id="fn5">
+        <div class="footnote-header"><span class="footnote-num">✦</span> Cross-timescale coherence and the ACC</div>
+        <div class="footnote-body">
+          <p>Your brain runs at least three parallel value systems. The <em>ventral striatum</em> evaluates immediate
+            rewards (this chocolate tastes good). The <em>orbitofrontal cortex</em> computes contextual value (but I'm
+            trying to eat better). The <em>prefrontal cortex</em> simulates long-horizon outcomes (my health in 20
+            years).</p>
+          <p>When these systems disagree, the <em>anterior cingulate cortex</em> (ACC) lights up — it's a conflict
+            monitor. That ACC activation feels like guilt, unease, or internal friction. You're doing something your
+            short-term system wants but your long-term system opposes, or vice versa.</p>
+          <p>Eudaimonia — Aristotle's "deep flourishing" — corresponds to states where all three timescales point in the
+            same direction. Your daily actions serve your monthly goals serve your life purpose. The ACC goes quiet. The
+            system stops fighting itself. That absence of internal conflict has a distinctive phenomenology: clarity,
+            flow, meaning. It's not the spike of pleasure. It's the steady hum of coherence.</p>
+        </div>
+      </div>
+      <p>When your daily actions are coherent with your long-term values, internal conflict signals drop. The system
+        isn't fighting itself.</p>
+
+      <div class="insight-card">
+        <h4>THE FREE ENERGY PRINCIPLE</h4>
+        <p>Karl Friston's framework: the brain is a prediction machine minimizing surprise (free energy). Happiness is
+          the state where your generative model of the world is well-calibrated — prediction errors are low, the model
+          compresses experience efficiently, and you have high confidence in navigating future states.</p>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ========== CH 7: TWO WAYS OF KNOWING ========== -->
-<section class="section" id="sec-7">
-  <div class="section-inner">
-    <div class="chapter-num warm">CHAPTER VII — TWO WAYS OF KNOWING</div>
-    <h2>The Engineer and <em>the Biologist</em></h2>
-    <div class="diagram-3d">
-      <svg class="loops-viz" viewBox="0 0 500 200" style="width:100%;height:100%;">
-        <!-- LEFT: Engineer's tight loop -->
-        <g transform="translate(125,100)">
-          <!-- Loop circle -->
-          <circle r="55" fill="none" stroke="#f59e0b" stroke-width="1.5" opacity="0.3"/>
-          <!-- Animated signal going around -->
-          <circle r="5" fill="#f59e0b" opacity="0.9">
-            <animateMotion dur="2s" repeatCount="indefinite" path="M0,-55 A55,55 0 1,1 -0.1,-55"/>
+  <!-- ========== CH 4: DESIRE ========== -->
+  <section class="section" id="sec-4">
+    <div class="section-inner">
+      <div class="chapter-num warm">CHAPTER IV — THE TRAP OF DESIRE</div>
+      <h2>A Contract To Be <em>Unhappy</em></h2>
+
+      <div class="quote-block">
+        <p>"Desire is a contract with yourself to be unhappy until fulfilled."</p>
+        <div class="quote-attr">— NAVAL RAVIKANT</div>
+      </div>
+      <div class="diagram-3d">
+        <svg class="desire-viz" viewBox="0 0 500 220" style="width:100%;height:100%;">
+          <!-- Baseline before desire -->
+          <line x1="40" y1="150" x2="200" y2="150" stroke="#8a8680" stroke-width="1" stroke-dasharray="4,4"
+            opacity="0.5" />
+          <text x="42" y="143" fill="#8a8680" font-family="JetBrains Mono, monospace" font-size="8"
+            letter-spacing="1">BASELINE</text>
+
+          <!-- Current reality line (stays flat) -->
+          <line x1="40" y1="150" x2="460" y2="150" stroke="#22d3ee" stroke-width="1.5" opacity="0.4" />
+          <text x="420" y="165" fill="#22d3ee" font-family="JetBrains Mono, monospace" font-size="7" letter-spacing="1"
+            opacity="0.7">REALITY</text>
+
+          <!-- Desire shifts expectation upward -->
+          <path d="M200 150 C220 150 230 80 250 80 L460 80" fill="none" stroke="#f59e0b" stroke-width="2" opacity="0.8">
+            <animate attributeName="opacity" values="0;0.8;0.8" dur="3s" fill="freeze" />
+          </path>
+          <text x="420" y="73" fill="#f59e0b" font-family="JetBrains Mono, monospace" font-size="7" letter-spacing="1"
+            opacity="0">
+            EXPECTATION
+            <animate attributeName="opacity" values="0;0;0.8" dur="3s" fill="freeze" />
+          </text>
+
+          <!-- The gap = suffering -->
+          <rect x="340" y="80" width="2" height="70" fill="#f472b6" opacity="0">
+            <animate attributeName="opacity" values="0;0;0.6" dur="3s" fill="freeze" />
+          </rect>
+          <line x1="336" y1="80" x2="348" y2="80" stroke="#f472b6" stroke-width="1" opacity="0">
+            <animate attributeName="opacity" values="0;0;0.6" dur="3s" fill="freeze" />
+          </line>
+          <line x1="336" y1="150" x2="348" y2="150" stroke="#f472b6" stroke-width="1" opacity="0">
+            <animate attributeName="opacity" values="0;0;0.6" dur="3s" fill="freeze" />
+          </line>
+          <text x="356" y="120" fill="#f472b6" font-family="JetBrains Mono, monospace" font-size="8" letter-spacing="1"
+            opacity="0">
+            GAP = SUFFERING
+            <animate attributeName="opacity" values="0;0;0;0.9" dur="4s" fill="freeze" />
+          </text>
+
+          <!-- Moment of desire formation -->
+          <circle cx="200" cy="150" r="4" fill="#f59e0b" opacity="0">
+            <animate attributeName="opacity" values="0;0;1;0.6" dur="3s" fill="freeze" />
+            <animate attributeName="r" values="4;4;8;4" dur="3s" fill="freeze" />
           </circle>
-          <circle r="10" fill="none" stroke="#f59e0b" opacity="0.3">
-            <animateMotion dur="2s" repeatCount="indefinite" path="M0,-55 A55,55 0 1,1 -0.1,-55"/>
-            <animate attributeName="opacity" values="0.4;0;0.4" dur="2s" repeatCount="indefinite"/>
-          </circle>
-          
-          <!-- Node labels around the loop -->
-          <text x="0" y="-68" fill="#f59e0b" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle" letter-spacing="1">INTERVENE</text>
-          <text x="68" y="4" fill="#f59e0b" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="start" letter-spacing="1">FEEL</text>
-          <text x="0" y="78" fill="#f59e0b" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle" letter-spacing="1">UPDATE</text>
-          <text x="-68" y="4" fill="#f59e0b" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="end" letter-spacing="1">OBSERVE</text>
-          
-          <!-- Nodes -->
-          <circle cx="0" cy="-55" r="3" fill="#f59e0b" opacity="0.6"/>
-          <circle cx="55" cy="0" r="3" fill="#f59e0b" opacity="0.6"/>
-          <circle cx="0" cy="55" r="3" fill="#f59e0b" opacity="0.6"/>
-          <circle cx="-55" cy="0" r="3" fill="#f59e0b" opacity="0.6"/>
-        </g>
-        <text x="125" y="25" fill="#f59e0b" font-family="JetBrains Mono, monospace" font-size="8" text-anchor="middle" letter-spacing="2">ENGINEER</text>
-        <text x="125" y="185" fill="#4a4844" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle" letter-spacing="1">TIGHT LOOP · LOW LATENCY</text>
+          <text x="178" y="175" fill="#f59e0b" font-family="JetBrains Mono, monospace" font-size="7"
+            text-anchor="middle" opacity="0">
+            DESIRE FORMS
+            <animate attributeName="opacity" values="0;0;0.8;0.5" dur="3s" fill="freeze" />
+          </text>
 
-        <!-- RIGHT: Biologist's institutional loop -->
-        <g transform="translate(375,100)">
-          <!-- Outer institutional ring -->
-          <circle r="55" fill="none" stroke="#6366f1" stroke-width="1.5" opacity="0.15"/>
-          <!-- Many intermediary nodes (the institution) -->
-          <circle r="40" fill="none" stroke="#6366f1" stroke-width="0.5" opacity="0.15" stroke-dasharray="3,3"/>
-          
-          <!-- Slow signal going around with many hops -->
-          <circle r="4" fill="#6366f1" opacity="0.8">
-            <animateMotion dur="7s" repeatCount="indefinite" path="M0,-55 A55,55 0 1,1 -0.1,-55"/>
+          <!-- Pulsing error signal -->
+          <rect x="250" y="81" width="200" height="68" fill="url(#errorGrad)" opacity="0">
+            <animate attributeName="opacity" values="0;0;0;0.15;0.05;0.15;0.05;0.15" dur="6s"
+              repeatCount="indefinite" />
+          </rect>
+          <defs>
+            <linearGradient id="errorGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#f59e0b" />
+              <stop offset="100%" stop-color="#f472b6" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+
+
+      <p>This maps perfectly onto the prediction error framework. When you form a desire, you update your expected
+        future state to include the desired outcome. From that moment, your brain computes a <strong>persistent negative
+          prediction error<sup class="footnote-ref"
+            onclick="document.getElementById('fn6').classList.toggle('open')">✹</sup></strong> — the gap between where
+        you are and where your model says you "should" be.</p>
+      <div class="footnote-box" id="fn6">
+        <div class="footnote-header"><span class="footnote-num">✹</span> How desire rewires your baseline</div>
+        <div class="footnote-body">
+          <p>Before you want something, your predictive model has a certain baseline: <em>"this is the world."</em>
+            Prediction errors are computed against that baseline. If something unexpectedly good happens, positive
+            error. Fine.</p>
+          <p>The moment you form a desire — say, a promotion — your model updates to include the desired state as
+            <em>expected</em>. Now the absence of the promotion isn't a neutral state. It's a persistent negative
+            prediction error. Your system continuously computes: <em>expected state (promoted) minus current state (not
+              promoted) = negative delta</em>. That negative delta is registered by the habenula and dorsal ACC as a
+            low-grade aversive signal. It's not acute pain. It's a background hum of insufficiency.
+          </p>
+          <p>This is why people can be objectively well-off and subjectively miserable. Their prediction errors aren't
+            computed against some absolute standard. They're computed against their own self-generated expectations.
+            Every desire you form raises the bar against which reality is measured.</p>
+        </div>
+      </div>
+
+      <p>Every moment the desire remains unfulfilled, the system registers a low-grade error signal. <strong>You've
+          voluntarily shifted your reference point, and now reality perpetually falls short.<sup class="footnote-ref"
+            onclick="document.getElementById('fn7').classList.toggle('open')">✖</sup></strong></p>
+      <div class="footnote-box" id="fn7">
+        <div class="footnote-header"><span class="footnote-num">✖</span> Prospect theory and hedonic adaptation</div>
+        <div class="footnote-body">
+          <p>Kahneman and Tversky's prospect theory showed that humans don't evaluate outcomes in absolute terms — they
+            evaluate them <em>relative to a reference point</em>. Gains and losses are computed from wherever you
+            currently stand, and losses loom larger than equivalent gains (loss aversion, roughly 2:1).</p>
+          <p>Now combine this with hedonic adaptation: any sustained change in circumstances gets absorbed into your new
+            baseline within weeks to months. Lottery winners return to baseline happiness. Paraplegics return closer to
+            baseline than anyone predicts.</p>
+          <p>The reference point is a moving target. And desire pushes it <em>forward</em> — you begin evaluating your
+            current reality against an imagined future state. Since losses loom larger, the gap between "where I am" and
+            "where I want to be" registers as disproportionately painful compared to the pleasure you'll actually get
+            upon arrival. The architecture guarantees disappointment.</p>
+        </div>
+      </div>
+
+      <p>The dopaminergic system wasn't designed for satisfaction — it was designed for pursuit. An organism that
+        reaches contentment stops exploring and gets outcompeted. The architecture is biased toward perpetual wanting.
+      </p>
+
+      <div class="insight-card">
+        <h4>BUDDHISM MEETS FRISTON</h4>
+        <p>The Buddhist concept of <em>tanha</em> (craving as the root of suffering) is nearly identical to the free
+          energy formulation. Every desire is a new prior that increases the divergence between your generative model
+          and reality. More desires = more free energy = more surprise = more suffering. Meditation reduces the weight
+          on acquired priors, letting the system settle toward lower free energy without needing the world to change.
+        </p>
+      </div>
+
+      <p>The profound irony: <strong>desire borrows unhappiness from the future and makes you experience it now<sup
+            class="footnote-ref" onclick="document.getElementById('fn8').classList.toggle('open')">⏳</sup></strong>, in
+        hopes that fulfillment will zero out the debt. But fulfillment triggers rebalancing and new desires. The only
+        way to win is to be selective about which contracts you sign.</p>
+      <div class="footnote-box" id="fn8">
+        <div class="footnote-header"><span class="footnote-num">⏳</span> Temporal borrowing and the dopamine debt</div>
+        <div class="footnote-body">
+          <p>This isn't just a metaphor — it's a literal description of dopaminergic dynamics. When you anticipate a
+            future reward, dopamine fires <em>now</em>, at the moment of anticipation. That dopamine mobilizes action
+            (motivation) but it also creates a physiological debt: the system will need to "pay back" that activation.
+          </p>
+          <p>If the reward arrives and matches expectation, the system balances — but you don't get a <em>second</em>
+            dopamine hit, because the reward was already predicted. The pleasure was pre-spent. If the reward exceeds
+            expectation, you get a small surplus. If it falls short, you experience a below-baseline dip — active
+            disappointment, not just neutral absence.</p>
+          <p>Chronic desire is therefore a state of continuous dopaminergic borrowing. You're spending future
+            reward-signal now as motivation, and the books never quite balance because hedonic adaptation keeps
+            recalibrating the baseline upward. Addictive substances exploit this same architecture by creating massive
+            anticipatory dopamine spikes that the natural reward can never repay — hence tolerance and withdrawal.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CH 5: ATTRACTORS ========== -->
+  <section class="section" id="sec-5">
+    <div class="section-inner">
+      <div class="chapter-num bio">CHAPTER V — UNIVERSALITY</div>
+      <h2>The Attractors of <em>Wellbeing</em></h2>
+
+      <p>Here's the deepest insight, and it comes not from neuroscience but from physics: <strong>totally different
+          microscopic structures can lead to the same macroscopic behavior<sup class="footnote-ref"
+            onclick="document.getElementById('fn9').classList.toggle('open')">⚛</sup></strong> — if the environmental
+        constraints enforce this and the system is flexible enough.</p>
+      <div class="footnote-box" id="fn9">
+        <div class="footnote-header"><span class="footnote-num">⚛</span> Universality in physics</div>
+        <div class="footnote-body">
+          <p>Universality is one of the deepest ideas in physics. Water boiling and iron losing its magnetism are
+            completely different physical systems — different particles, different forces, different scales. Yet near
+            their critical points, they exhibit <em>identical</em> mathematical behavior. The exponents describing how
+            fluctuations scale, how correlations decay — the same numbers appear.</p>
+          <p>Kenneth Wilson's renormalization group explains why: when you "zoom out" from microscopic details, the
+            irrelevant details wash away and only the system's fundamental symmetries and dimensionality matter.
+            Completely different microscopic substrates converge on the same macroscopic behavior because the
+            <em>constraints</em> — not the components — determine the outcome.
+          </p>
+          <p>Applied to biology: neurons made of carbon, silicon chips, or hypothetical alien chemistry could all
+            converge on the same functional patterns (circadian rhythms, prediction error minimization, social bonding)
+            because the constraints — thermodynamics, information theory, the structure of the physical environment —
+            carve out the same basins of attraction regardless of substrate.</p>
+        </div>
+      </div>
+
+      <div class="diagram-3d">
+        <div class="attractor-container" id="attractorViz">
+          <!-- Generated by JS -->
+        </div>
+      </div>
+
+      <p>This is universality. And it reframes everything about happiness.</p>
+
+      <p>When people thrive on circadian rhythms, whole foods, family bonds, and personal growth — the explanation isn't
+        "genes coded for it." The deeper explanation is: <strong>given the physical and thermodynamic constraints any
+          embodied information-processing system faces on Earth, these patterns are attractors.<sup class="footnote-ref"
+            onclick="document.getElementById('fn10').classList.toggle('open')">❂</sup></strong></p>
+      <div class="footnote-box" id="fn10">
+        <div class="footnote-header"><span class="footnote-num">❂</span> Dissipative structures and Prigogine</div>
+        <div class="footnote-body">
+          <p>Ilya Prigogine won the Nobel Prize for showing that systems far from thermodynamic equilibrium can
+            spontaneously organize into stable patterns — <em>dissipative structures</em>. A candle flame, a hurricane,
+            a living cell: all maintain order by continuously dissipating energy. They're not static. They're dynamic
+            patterns that persist because energy keeps flowing through them.</p>
+          <p>An organism is a dissipative structure. It maintains low internal entropy by exporting high entropy (heat,
+            waste) into the environment. To sustain this, it needs a steady energy throughput, which means it must
+            synchronize with environmental energy sources — hence circadian rhythms on a rotating planet. It must
+            predict threats to its energy supply — hence a nervous system. It must reproduce before it degrades — hence
+            the deep drive toward offspring.</p>
+          <p>These aren't "choices" evolution made. They're thermodynamic inevitabilities for any self-maintaining
+            dissipative structure in Earth-like conditions. The attractor basin isn't biological. It's physical.</p>
+        </div>
+      </div>
+
+      <p>Any organism managing energy budgets on a rotating planet will converge on circadian-like cycles. Any system
+        producing offspring that need extended learning will converge on cooperative caregiving. Not because of shared
+        genes, but because the math demands it.</p>
+
+      <div class="insight-card">
+        <h4>WHY MODERN LIFE FEELS OFF</h4>
+        <p>Materially comfortable people can feel inexplicably wrong because they've satisfied shallow, recent priors
+          (financial security, stimulation, convenience) while systematically violating deep ones (circadian rhythms,
+          nutritional coherence, tribal belonging, physical exertion, intergenerational purpose). The surface reward
+          system says "fine" while ancient homeostatic models scream prediction errors.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CH 6: THE FURROW ========== -->
+  <section class="section" id="sec-6">
+    <div class="section-inner">
+      <div class="chapter-num coral">CHAPTER VI — THE EVOLUTIONARY FURROW</div>
+      <h2>Stay in the <em>Furrow</em></h2>
+      <div class="diagram-3d">
+        <svg class="furrow-viz" viewBox="0 0 500 240" style="width:100%;height:100%;">
+          <!-- Landscape / energy surface -->
+          <path
+            d="M0 60 Q60 55 100 80 Q140 110 170 140 Q200 170 250 180 Q300 170 330 140 Q360 110 400 80 Q440 55 500 60"
+            fill="none" stroke="rgba(244,114,182,0.2)" stroke-width="1" />
+          <path
+            d="M0 70 Q60 65 100 90 Q140 120 170 150 Q200 180 250 190 Q300 180 330 150 Q360 120 400 90 Q440 65 500 70"
+            fill="none" stroke="rgba(244,114,182,0.15)" stroke-width="1" />
+          <path
+            d="M0 80 Q60 75 100 100 Q140 130 170 160 Q200 190 250 200 Q300 190 330 160 Q360 130 400 100 Q440 75 500 80"
+            fill="none" stroke="rgba(244,114,182,0.1)" stroke-width="1" />
+
+          <!-- The furrow (attractor groove) -->
+          <path
+            d="M0 50 Q60 45 100 70 Q140 100 170 130 Q200 165 250 178 Q300 165 330 130 Q360 100 400 70 Q440 45 500 50"
+            fill="none" stroke="#f472b6" stroke-width="2" opacity="0.6" />
+
+          <!-- Fill the basin -->
+          <path
+            d="M140 100 Q170 130 200 165 Q225 178 250 182 Q275 178 300 165 Q330 130 360 100 L360 102 Q330 132 300 167 Q275 180 250 184 Q225 180 200 167 Q170 132 140 102 Z"
+            fill="rgba(244,114,182,0.06)" />
+
+          <!-- Ball settling into furrow -->
+          <circle r="7" fill="#f472b6" opacity="0.9">
+            <animateMotion dur="5s" repeatCount="indefinite"
+              path="M150 95 Q180 120 210 150 Q230 170 250 175 Q260 172 255 176 Q250 178 248 176 Q250 177 250 177" />
+            <animate attributeName="r" values="7;6;7;6;7" dur="5s" repeatCount="indefinite" />
           </circle>
-          
-          <!-- Many intermediary nodes -->
-          <circle cx="0" cy="-55" r="2.5" fill="#6366f1" opacity="0.4"/>
-          <circle cx="29" cy="-47" r="2" fill="#6366f1" opacity="0.3"/>
-          <circle cx="48" cy="-27" r="2" fill="#6366f1" opacity="0.3"/>
-          <circle cx="55" cy="0" r="2.5" fill="#6366f1" opacity="0.4"/>
-          <circle cx="48" cy="27" r="2" fill="#6366f1" opacity="0.3"/>
-          <circle cx="29" cy="47" r="2" fill="#6366f1" opacity="0.3"/>
-          <circle cx="0" cy="55" r="2.5" fill="#6366f1" opacity="0.4"/>
-          <circle cx="-29" cy="47" r="2" fill="#6366f1" opacity="0.3"/>
-          <circle cx="-48" cy="27" r="2" fill="#6366f1" opacity="0.3"/>
-          <circle cx="-55" cy="0" r="2.5" fill="#6366f1" opacity="0.4"/>
-          <circle cx="-48" cy="-27" r="2" fill="#6366f1" opacity="0.3"/>
-          <circle cx="-29" cy="-47" r="2" fill="#6366f1" opacity="0.3"/>
-          
+          <!-- Glow on ball -->
+          <circle r="14" fill="none" stroke="#f472b6" opacity="0">
+            <animateMotion dur="5s" repeatCount="indefinite"
+              path="M150 95 Q180 120 210 150 Q230 170 250 175 Q260 172 255 176 Q250 178 248 176 Q250 177 250 177" />
+            <animate attributeName="opacity" values="0.3;0.1;0;0.1;0.3" dur="5s" repeatCount="indefinite" />
+          </circle>
+
           <!-- Labels -->
-          <text x="0" y="-68" fill="#6366f1" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle" letter-spacing="1">HYPOTHESIS</text>
-          <text x="68" y="4" fill="#6366f1" font-family="JetBrains Mono, monospace" font-size="6" text-anchor="start" letter-spacing="1">PEER REVIEW</text>
-          <text x="0" y="78" fill="#6366f1" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle" letter-spacing="1">CONSENSUS</text>
-          <text x="-68" y="4" fill="#6366f1" font-family="JetBrains Mono, monospace" font-size="6" text-anchor="end" letter-spacing="1">LITERATURE</text>
-          
-          <!-- Corruption indicator -->
-          <circle cx="40" cy="-40" r="8" fill="none" stroke="rgba(239,68,68,0.4)" stroke-width="1" stroke-dasharray="2,2">
-            <animate attributeName="opacity" values="0.2;0.5;0.2" dur="3s" repeatCount="indefinite"/>
+          <text x="250" y="210" fill="#f472b6" font-family="JetBrains Mono, monospace" font-size="8"
+            text-anchor="middle" letter-spacing="2" opacity="0.6">EVOLUTIONARY FURROW</text>
+          <text x="250" y="222" fill="#4a4844" font-family="JetBrains Mono, monospace" font-size="7"
+            text-anchor="middle" letter-spacing="1">LOWEST ENERGY PATH</text>
+
+          <!-- Energy arrows on sides -->
+          <path d="M110 75 L125 68" fill="none" stroke="#8a8680" stroke-width="0.8" marker-end="url(#arrowDim)" />
+          <path d="M390 75 L375 68" fill="none" stroke="#8a8680" stroke-width="0.8" marker-end="url(#arrowDim)" />
+          <text x="95" y="65" fill="#4a4844" font-family="JetBrains Mono, monospace" font-size="6"
+            letter-spacing="1">HIGH ENERGY</text>
+          <text x="370" y="65" fill="#4a4844" font-family="JetBrains Mono, monospace" font-size="6"
+            letter-spacing="1">HIGH ENERGY</text>
+
+          <defs>
+            <marker id="arrowDim" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="5" markerHeight="5"
+              orient="auto-start-reverse">
+              <path d="M0,0 L6,3 L0,6 Z" fill="#8a8680" />
+            </marker>
+          </defs>
+        </svg>
+      </div>
+
+
+      <p>For 25 years, a biologist told his father the same thing: <strong>"Stay in the evolutionary furrow."<sup
+            class="footnote-ref" onclick="document.getElementById('fn11').classList.toggle('open')">〰</sup></strong>
+      </p>
+      <div class="footnote-box" id="fn11">
+        <div class="footnote-header"><span class="footnote-num">〰</span> Attractor basins in dynamical systems</div>
+        <div class="footnote-body">
+          <p>In dynamical systems theory, an <em>attractor</em> is a state (or set of states) that a system naturally
+            evolves toward over time. An <em>attractor basin</em> is the region of initial conditions from which the
+            system will flow toward that attractor — like water flowing into a valley regardless of where on the
+            hillside it starts.</p>
+          <p>"Furrow" captures this with startling precision. A furrow in soil channels water. It doesn't force the
+            water to flow — the water flows naturally because the landscape geometry makes it the lowest-energy path.
+            You can pour water on any part of the field, and if it lands within the furrow's basin, it ends up in the
+            same channel.</p>
+          <p>The metaphor extends further: you <em>can</em> push water out of the furrow. It takes energy. And the
+            moment you stop pushing, it flows back. This is exactly what happens when people fight deep biological
+            patterns — they can sustain it with willpower (energy expenditure), but the attractor keeps pulling. The
+            system "wants" to return to the basin. Wellbeing is what it feels like to stop fighting the landscape.</p>
+        </div>
+      </div>
+      <p>The phrase came from intuition before the formal frameworks existed — before he'd generalized chaos theory and
+        attractor basins into a worldview.</p>
+
+      <p>A furrow is a groove that channels flow. Things naturally settle into it. You can fight against it, but at a
+        cost. It was a remarkably precise metaphor for an attractor basin — coined from pure biological intuition,
+        decades before the math caught up.</p>
+
+      <p>Intuition, through this lens, isn't mystical. It's your generative model having learned a compressed
+        representation of deep statistical regularities <strong>before</strong> the conscious, verbal system can explain
+        why. The pattern recognition runs ahead of the explanation.</p>
+
+      <p>Yet the same biologist — rigorous, trained in molecular biology, armed with Occam's razor and falsificationism
+        — dismissed supplementation as mostly unnecessary. He was applying perfect epistemology inside a system with
+        corrupted inputs. Nutrition science, compromised by decades of industry funding and methodological failures, had
+        constrained his hypothesis space.</p>
+
+      <p><strong>The biologist's father, an engineer, saw through it.<sup class="footnote-ref"
+            onclick="document.getElementById('fn12').classList.toggle('open')">⚙</sup></strong></p>
+      <div class="footnote-box" id="fn12">
+        <div class="footnote-header"><span class="footnote-num">⚙</span> First-person vs. third-person epistemology
+        </div>
+        <div class="footnote-body">
+          <p>There are two fundamentally different ways to know something. <em>Third-person knowledge</em> comes from
+            external observation, controlled experiments, peer-reviewed literature — the scientific method as an
+            institution. <em>First-person knowledge</em> comes from direct intervention on your own system and observing
+            the result — an n-of-1 trial.</p>
+          <p>The engineer's approach — try cod liver oil, notice joints feel better, keep taking it — is a remarkably
+            efficient Bayesian update. The signal-to-noise ratio is high because you have privileged access to your own
+            interoceptive state (how you <em>feel</em>), the latency between intervention and observation is short, and
+            the relevance is maximal (it's literally your own body).</p>
+          <p>The biologist's approach — check meta-analyses, evaluate RCTs, defer to consensus — is more powerful for
+            population-level truths but vulnerable to systemic corruption. When an entire field has been captured by
+            industry funding, when key studies were designed to show null results, when the Overton window of acceptable
+            hypotheses has been artificially narrowed — the third-person system feeds you confidently wrong answers. The
+            engineer, reading his own body, bypassed the corrupted institution entirely.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CH 7: TWO WAYS OF KNOWING ========== -->
+  <section class="section" id="sec-7">
+    <div class="section-inner">
+      <div class="chapter-num warm">CHAPTER VII — TWO WAYS OF KNOWING</div>
+      <h2>The Engineer and <em>the Biologist</em></h2>
+      <div class="diagram-3d">
+        <svg class="loops-viz" viewBox="0 0 500 200" style="width:100%;height:100%;">
+          <!-- LEFT: Engineer's tight loop -->
+          <g transform="translate(125,100)">
+            <!-- Loop circle -->
+            <circle r="55" fill="none" stroke="#f59e0b" stroke-width="1.5" opacity="0.3" />
+            <!-- Animated signal going around -->
+            <circle r="5" fill="#f59e0b" opacity="0.9">
+              <animateMotion dur="2s" repeatCount="indefinite" path="M0,-55 A55,55 0 1,1 -0.1,-55" />
+            </circle>
+            <circle r="10" fill="none" stroke="#f59e0b" opacity="0.3">
+              <animateMotion dur="2s" repeatCount="indefinite" path="M0,-55 A55,55 0 1,1 -0.1,-55" />
+              <animate attributeName="opacity" values="0.4;0;0.4" dur="2s" repeatCount="indefinite" />
+            </circle>
+
+            <!-- Node labels around the loop -->
+            <text x="0" y="-68" fill="#f59e0b" font-family="JetBrains Mono, monospace" font-size="7"
+              text-anchor="middle" letter-spacing="1">INTERVENE</text>
+            <text x="68" y="4" fill="#f59e0b" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="start"
+              letter-spacing="1">FEEL</text>
+            <text x="0" y="78" fill="#f59e0b" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle"
+              letter-spacing="1">UPDATE</text>
+            <text x="-68" y="4" fill="#f59e0b" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="end"
+              letter-spacing="1">OBSERVE</text>
+
+            <!-- Nodes -->
+            <circle cx="0" cy="-55" r="3" fill="#f59e0b" opacity="0.6" />
+            <circle cx="55" cy="0" r="3" fill="#f59e0b" opacity="0.6" />
+            <circle cx="0" cy="55" r="3" fill="#f59e0b" opacity="0.6" />
+            <circle cx="-55" cy="0" r="3" fill="#f59e0b" opacity="0.6" />
+          </g>
+          <text x="125" y="25" fill="#f59e0b" font-family="JetBrains Mono, monospace" font-size="8" text-anchor="middle"
+            letter-spacing="2">ENGINEER</text>
+          <text x="125" y="185" fill="#4a4844" font-family="JetBrains Mono, monospace" font-size="7"
+            text-anchor="middle" letter-spacing="1">TIGHT LOOP · LOW LATENCY</text>
+
+          <!-- RIGHT: Biologist's institutional loop -->
+          <g transform="translate(375,100)">
+            <!-- Outer institutional ring -->
+            <circle r="55" fill="none" stroke="#6366f1" stroke-width="1.5" opacity="0.15" />
+            <!-- Many intermediary nodes (the institution) -->
+            <circle r="40" fill="none" stroke="#6366f1" stroke-width="0.5" opacity="0.15" stroke-dasharray="3,3" />
+
+            <!-- Slow signal going around with many hops -->
+            <circle r="4" fill="#6366f1" opacity="0.8">
+              <animateMotion dur="7s" repeatCount="indefinite" path="M0,-55 A55,55 0 1,1 -0.1,-55" />
+            </circle>
+
+            <!-- Many intermediary nodes -->
+            <circle cx="0" cy="-55" r="2.5" fill="#6366f1" opacity="0.4" />
+            <circle cx="29" cy="-47" r="2" fill="#6366f1" opacity="0.3" />
+            <circle cx="48" cy="-27" r="2" fill="#6366f1" opacity="0.3" />
+            <circle cx="55" cy="0" r="2.5" fill="#6366f1" opacity="0.4" />
+            <circle cx="48" cy="27" r="2" fill="#6366f1" opacity="0.3" />
+            <circle cx="29" cy="47" r="2" fill="#6366f1" opacity="0.3" />
+            <circle cx="0" cy="55" r="2.5" fill="#6366f1" opacity="0.4" />
+            <circle cx="-29" cy="47" r="2" fill="#6366f1" opacity="0.3" />
+            <circle cx="-48" cy="27" r="2" fill="#6366f1" opacity="0.3" />
+            <circle cx="-55" cy="0" r="2.5" fill="#6366f1" opacity="0.4" />
+            <circle cx="-48" cy="-27" r="2" fill="#6366f1" opacity="0.3" />
+            <circle cx="-29" cy="-47" r="2" fill="#6366f1" opacity="0.3" />
+
+            <!-- Labels -->
+            <text x="0" y="-68" fill="#6366f1" font-family="JetBrains Mono, monospace" font-size="7"
+              text-anchor="middle" letter-spacing="1">HYPOTHESIS</text>
+            <text x="68" y="4" fill="#6366f1" font-family="JetBrains Mono, monospace" font-size="6" text-anchor="start"
+              letter-spacing="1">PEER REVIEW</text>
+            <text x="0" y="78" fill="#6366f1" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle"
+              letter-spacing="1">CONSENSUS</text>
+            <text x="-68" y="4" fill="#6366f1" font-family="JetBrains Mono, monospace" font-size="6" text-anchor="end"
+              letter-spacing="1">LITERATURE</text>
+
+            <!-- Corruption indicator -->
+            <circle cx="40" cy="-40" r="8" fill="none" stroke="rgba(239,68,68,0.4)" stroke-width="1"
+              stroke-dasharray="2,2">
+              <animate attributeName="opacity" values="0.2;0.5;0.2" dur="3s" repeatCount="indefinite" />
+            </circle>
+            <text x="40" y="-38" fill="rgba(239,68,68,0.5)" font-family="JetBrains Mono, monospace" font-size="5"
+              text-anchor="middle">⚠</text>
+          </g>
+          <text x="375" y="25" fill="#6366f1" font-family="JetBrains Mono, monospace" font-size="8" text-anchor="middle"
+            letter-spacing="2">BIOLOGIST</text>
+          <text x="375" y="185" fill="#4a4844" font-family="JetBrains Mono, monospace" font-size="7"
+            text-anchor="middle" letter-spacing="1">LONG LOOP · HIGH LATENCY</text>
+
+          <!-- Divider -->
+          <line x1="250" y1="35" x2="250" y2="170" stroke="rgba(255,255,255,0.04)" stroke-width="1" />
+        </svg>
+      </div>
+
+
+      <div class="compare-grid">
+        <div class="compare-card engineer">
+          <h4>THE FATHER — ENGINEER</h4>
+          <p>Ran a first-person empirical loop. Intervene → observe → update. His generative model was calibrated
+            against his own body's signals — a tight feedback loop with low latency and high signal relevance.</p>
+          <p>Didn't need to know <em>why</em> something worked. Just needed to close the loop between intervention and
+            outcome on his own system.</p>
+          <div class="tag">MACROSCOPIC SIGNAL</div>
+        </div>
+        <div class="compare-card biologist">
+          <h4>THE SON — BIOLOGIST</h4>
+          <p>Ran a third-person institutional model. Literature → consensus → peer review. Powerful for many things —
+            but with a fatal failure mode: when the institutions have corrupted priors.</p>
+          <p>Extraordinary knowledge of mechanism — pathways, receptors, gene expression — but microscopic detail
+            doesn't determine macroscopic behavior when universality holds.</p>
+          <div class="tag">MICROSCOPIC DETAIL</div>
+        </div>
+      </div>
+
+      <p>Cognitive tools like Occam's razor and falsification are meta-tools that operate on representations you already
+        have. They help you prune and select hypotheses. <strong>But they can't save you if the hypothesis space itself
+          has been artificially constrained by institutional groupthink.<sup class="footnote-ref"
+            onclick="document.getElementById('fn13').classList.toggle('open')">⛓</sup></strong></p>
+      <div class="footnote-box" id="fn13">
+        <div class="footnote-header"><span class="footnote-num">⛓</span> The limits of meta-cognition</div>
+        <div class="footnote-body">
+          <p>Occam's razor says: don't multiply entities beyond necessity. Falsificationism says: prefer theories that
+            make risky, testable predictions. These are <em>selection tools</em> — they help you choose between
+            hypotheses. But they operate on whatever hypotheses you're <em>already considering</em>.</p>
+          <p>If the entire space of hypotheses you're evaluating has been pre-filtered by institutional consensus, your
+            meta-cognitive tools are optimizing within a constrained search space. You'll find the "best" answer within
+            the allowed set — which might be far from the globally best answer. It's like using perfect logic to choose
+            the best restaurant on a street, when the best restaurant in the city is three blocks away and you don't
+            know it exists.</p>
+          <p>Nutrition science is a textbook case. The lipid hypothesis (dietary fat causes heart disease) dominated for
+            decades despite weak evidence, partly because Ancel Keys's influence and industry funding from sugar
+            companies narrowed the hypothesis space. Researchers applying rigorous methodology <em>within</em> that
+            space kept confirming the wrong framework. The tools worked perfectly. The search space was rigged.</p>
+        </div>
+      </div>
+
+      <p>You can shave with Occam's razor inside a room someone else built. The biologist's father was outside the room,
+        just
+        feeling the weather.</p>
+
+      <div class="insight-card">
+        <h4>THE REAL OCCAM'S RAZOR</h4>
+        <p>If a system has been self-regulating for billions of years and someone claims it needs no external inputs —
+          despite radical changes in soil depletion, food processing, and light exposure — that's the extraordinary
+          claim requiring evidence.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CH 8: SYNTHESIS ========== -->
+  <section class="section" id="sec-8">
+    <div class="section-inner">
+      <div class="section-divider"></div>
+      <div class="diagram-3d" style="height:280px; margin-bottom:48px;">
+        <svg class="synthesis-viz" viewBox="0 0 400 250" style="width:100%;height:100%;">
+          <!-- Five concentric rings representing the five systems aligning -->
+
+          <!-- Ring 1: Reward predictions -->
+          <ellipse cx="200" cy="125" rx="170" ry="100" fill="none" stroke="#00e5a0" stroke-width="0.8" opacity="0">
+            <animate attributeName="opacity" values="0;0.3" dur="1s" begin="0s" fill="freeze" />
+            <animate attributeName="ry" values="60;100" dur="8s" repeatCount="indefinite" />
+            <animate attributeName="rx" values="150;170;150" dur="10s" repeatCount="indefinite" />
+          </ellipse>
+
+          <!-- Ring 2: Timescale alignment -->
+          <ellipse cx="200" cy="125" rx="140" ry="80" fill="none" stroke="#6366f1" stroke-width="0.8" opacity="0">
+            <animate attributeName="opacity" values="0;0.35" dur="1s" begin="0.3s" fill="freeze" />
+            <animate attributeName="ry" values="70;80;70" dur="7s" repeatCount="indefinite" />
+            <animate attributeName="rx" values="130;140;130" dur="9s" repeatCount="indefinite" />
+          </ellipse>
+
+          <!-- Ring 3: Homeostatic balance -->
+          <ellipse cx="200" cy="125" rx="110" ry="60" fill="none" stroke="#22d3ee" stroke-width="0.8" opacity="0">
+            <animate attributeName="opacity" values="0;0.4" dur="1s" begin="0.6s" fill="freeze" />
+            <animate attributeName="ry" values="55;60;55" dur="6s" repeatCount="indefinite" />
+            <animate attributeName="rx" values="100;110;100" dur="8s" repeatCount="indefinite" />
+          </ellipse>
+
+          <!-- Ring 4: Social calibration -->
+          <ellipse cx="200" cy="125" rx="80" ry="42" fill="none" stroke="#f59e0b" stroke-width="0.8" opacity="0">
+            <animate attributeName="opacity" values="0;0.45" dur="1s" begin="0.9s" fill="freeze" />
+            <animate attributeName="ry" values="38;42;38" dur="5s" repeatCount="indefinite" />
+            <animate attributeName="rx" values="72;80;72" dur="7s" repeatCount="indefinite" />
+          </ellipse>
+
+          <!-- Ring 5: Free energy minimum (innermost) -->
+          <ellipse cx="200" cy="125" rx="45" ry="24" fill="none" stroke="#f472b6" stroke-width="1" opacity="0">
+            <animate attributeName="opacity" values="0;0.6" dur="1s" begin="1.2s" fill="freeze" />
+            <animate attributeName="ry" values="22;24;22" dur="4s" repeatCount="indefinite" />
+            <animate attributeName="rx" values="40;45;40" dur="6s" repeatCount="indefinite" />
+          </ellipse>
+
+          <!-- Center glow -->
+          <circle cx="200" cy="125" r="8" opacity="0">
+            <animate attributeName="opacity" values="0;0.6" dur="1.5s" begin="1.5s" fill="freeze" />
+            <animate attributeName="r" values="6;10;6" dur="4s" repeatCount="indefinite" />
           </circle>
-          <text x="40" y="-38" fill="rgba(239,68,68,0.5)" font-family="JetBrains Mono, monospace" font-size="5" text-anchor="middle">⚠</text>
-        </g>
-        <text x="375" y="25" fill="#6366f1" font-family="JetBrains Mono, monospace" font-size="8" text-anchor="middle" letter-spacing="2">BIOLOGIST</text>
-        <text x="375" y="185" fill="#4a4844" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle" letter-spacing="1">LONG LOOP · HIGH LATENCY</text>
+          <circle cx="200" cy="125" r="8" fill="#e8e4dd" opacity="0">
+            <animate attributeName="opacity" values="0;0.6" dur="1.5s" begin="1.5s" fill="freeze" />
+            <animate attributeName="r" values="3;4;3" dur="4s" repeatCount="indefinite" />
+          </circle>
+          <!-- Outer glow -->
+          <circle cx="200" cy="125" r="20" fill="none" stroke="#e8e4dd" stroke-width="0.5" opacity="0">
+            <animate attributeName="opacity" values="0;0.15;0" dur="4s" begin="2s" repeatCount="indefinite" />
+            <animate attributeName="r" values="15;35;15" dur="4s" begin="2s" repeatCount="indefinite" />
+          </circle>
 
-        <!-- Divider -->
-        <line x1="250" y1="35" x2="250" y2="170" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
-      </svg>
-    </div>
+          <!-- Ring labels (right side, stacked) -->
+          <text x="378" y="38" fill="#00e5a0" font-family="JetBrains Mono, monospace" font-size="6" text-anchor="end"
+            letter-spacing="1" opacity="0.5">REWARD PREDICTIONS</text>
+          <text x="378" y="54" fill="#6366f1" font-family="JetBrains Mono, monospace" font-size="6" text-anchor="end"
+            letter-spacing="1" opacity="0.5">TIMESCALE ALIGNMENT</text>
+          <text x="378" y="70" fill="#22d3ee" font-family="JetBrains Mono, monospace" font-size="6" text-anchor="end"
+            letter-spacing="1" opacity="0.5">HOMEOSTATIC BALANCE</text>
+          <text x="378" y="86" fill="#f59e0b" font-family="JetBrains Mono, monospace" font-size="6" text-anchor="end"
+            letter-spacing="1" opacity="0.5">SOCIAL CALIBRATION</text>
+          <text x="378" y="102" fill="#f472b6" font-family="JetBrains Mono, monospace" font-size="6" text-anchor="end"
+            letter-spacing="1" opacity="0.5">FREE ENERGY MINIMUM</text>
 
-    
-    <div class="compare-grid">
-      <div class="compare-card engineer">
-        <h4>THE FATHER — ENGINEER</h4>
-        <p>Ran a first-person empirical loop. Intervene → observe → update. His generative model was calibrated against his own body's signals — a tight feedback loop with low latency and high signal relevance.</p>
-        <p>Didn't need to know <em>why</em> something worked. Just needed to close the loop between intervention and outcome on his own system.</p>
-        <div class="tag">MACROSCOPIC SIGNAL</div>
-      </div>
-      <div class="compare-card biologist">
-        <h4>THE SON — BIOLOGIST</h4>
-        <p>Ran a third-person institutional model. Literature → consensus → peer review. Powerful for many things — but with a fatal failure mode: when the institutions have corrupted priors.</p>
-        <p>Extraordinary knowledge of mechanism — pathways, receptors, gene expression — but microscopic detail doesn't determine macroscopic behavior when universality holds.</p>
-        <div class="tag">MICROSCOPIC DETAIL</div>
-      </div>
-    </div>
-    
-    <p>Cognitive tools like Occam's razor and falsification are meta-tools that operate on representations you already have. They help you prune and select hypotheses. <strong>But they can't save you if the hypothesis space itself has been artificially constrained by institutional groupthink.<sup class="footnote-ref" onclick="document.getElementById('fn13').classList.toggle('open')">13</sup></strong></p>
-    <div class="footnote-box" id="fn13">
-      <div class="footnote-header"><span class="footnote-num">13</span> The limits of meta-cognition</div>
-      <div class="footnote-body">
-        <p>Occam's razor says: don't multiply entities beyond necessity. Falsificationism says: prefer theories that make risky, testable predictions. These are <em>selection tools</em> — they help you choose between hypotheses. But they operate on whatever hypotheses you're <em>already considering</em>.</p>
-        <p>If the entire space of hypotheses you're evaluating has been pre-filtered by institutional consensus, your meta-cognitive tools are optimizing within a constrained search space. You'll find the "best" answer within the allowed set — which might be far from the globally best answer. It's like using perfect logic to choose the best restaurant on a street, when the best restaurant in the city is three blocks away and you don't know it exists.</p>
-        <p>Nutrition science is a textbook case. The lipid hypothesis (dietary fat causes heart disease) dominated for decades despite weak evidence, partly because Ancel Keys's influence and industry funding from sugar companies narrowed the hypothesis space. Researchers applying rigorous methodology <em>within</em> that space kept confirming the wrong framework. The tools worked perfectly. The search space was rigged.</p>
+          <text x="200" y="240" fill="#4a4844" font-family="JetBrains Mono, monospace" font-size="8"
+            text-anchor="middle" letter-spacing="2" opacity="0">
+            COHERENCE
+            <animate attributeName="opacity" values="0;0.5" dur="1s" begin="2s" fill="freeze" />
+          </text>
+        </svg>
       </div>
     </div>
-    
-    <p>You can shave with Occam's razor inside a room someone else built. Your father was outside the room, just feeling the weather.</p>
-    
-    <div class="insight-card">
-      <h4>THE REAL OCCAM'S RAZOR</h4>
-      <p>If a system has been self-regulating for billions of years and someone claims it needs no external inputs — despite radical changes in soil depletion, food processing, and light exposure — that's the extraordinary claim requiring evidence.</p>
+  </section>
+
+  <!-- ========== CH 9: PRACTICAL PROTOCOLS ========== -->
+  <section class="section" id="sec-practical">
+    <div class="section-inner">
+      <div class="chapter-num neural section-divider">PRACTICAL PROTOCOLS</div>
+      <h2>Algorithms for a Coherent Life</h2>
+
+      <div class="compare-grid" style="grid-template-columns: 1fr; gap: 24px;">
+
+        <div class="compare-card engineer">
+          <h4><span style="color:var(--accent-warm)">01.</span> SINGLE-TASKING</h4>
+          <p><strong>Run one process at a time.</strong> The brain is a serial processor for conscious attention.
+            Multitasking is just rapid context switching, which depletes metabolic resources and increases error rates.
+            Do one thing. Finish it. Close the loop.</p>
+        </div>
+
+        <div class="compare-card biologist">
+          <h4><span style="color:var(--accent-bio)">02.</span> DOPAMINE DETOX</h4>
+          <p><strong>Reset your reward baseline.</strong> Constant high-dopamine inputs (social media, sugar, novelty)
+            downregulate your receptors, making normal life feel "grey." Periodically remove all super-normal stimuli
+            for 24 hours to recalibrate your sensitivity to simple rewards.</p>
+        </div>
+
+        <div class="compare-card neural">
+          <h4><span style="color:var(--accent-neural)">03.</span> IDLE NETWORK</h4>
+          <p><strong>Let the Default Mode Network consolidate.</strong> Your brain needs offline time to integrate
+            information and update its generative model. Boredom is not a bug; it's the system's maintenance mode. Stop
+            filling every gap with input.</p>
+        </div>
+
+        <div class="compare-card cyan">
+          <h4><span style="color:var(--accent-cyan)">04.</span> CIRCADIAN SYNC</h4>
+          <p><strong>Anchor your biological clock.</strong> View bright sunlight within 30 minutes of waking. Avoid
+            bright light after sunset. Your entire hormonal orchestra is conducted by this light signal. If the
+            conductor is confused, the music falls apart.</p>
+        </div>
+
+        <div class="compare-card coral">
+          <h4><span style="color:var(--accent-coral)">05.</span> OPTICAL FLOW</h4>
+          <p><strong>Move forward through space.</strong> Walking or running generates "optical flow" — the visual
+            experience of the world moving past you. This specifically quiets the amygdala (fear center) and engages the
+            forward-looking circuits of the brain. When stuck, <em>move</em>.</p>
+        </div>
+
+      </div>
+
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- ========== CH 8: SYNTHESIS ========== -->
-<section class="section" id="sec-8">
-  <div class="section-inner">
-    <div class="section-divider"></div>
-    <div class="diagram-3d" style="height:280px; margin-bottom:48px;">
-      <svg class="synthesis-viz" viewBox="0 0 400 250" style="width:100%;height:100%;">
-        <!-- Five concentric rings representing the five systems aligning -->
-        
-        <!-- Ring 1: Reward predictions -->
-        <ellipse cx="200" cy="125" rx="170" ry="100" fill="none" stroke="#00e5a0" stroke-width="0.8" opacity="0">
-          <animate attributeName="opacity" values="0;0.3" dur="1s" begin="0s" fill="freeze"/>
-          <animate attributeName="ry" values="60;100" dur="8s" repeatCount="indefinite"/>
-          <animate attributeName="rx" values="150;170;150" dur="10s" repeatCount="indefinite"/>
-        </ellipse>
-        
-        <!-- Ring 2: Timescale alignment -->
-        <ellipse cx="200" cy="125" rx="140" ry="80" fill="none" stroke="#6366f1" stroke-width="0.8" opacity="0">
-          <animate attributeName="opacity" values="0;0.35" dur="1s" begin="0.3s" fill="freeze"/>
-          <animate attributeName="ry" values="70;80;70" dur="7s" repeatCount="indefinite"/>
-          <animate attributeName="rx" values="130;140;130" dur="9s" repeatCount="indefinite"/>
-        </ellipse>
-        
-        <!-- Ring 3: Homeostatic balance -->
-        <ellipse cx="200" cy="125" rx="110" ry="60" fill="none" stroke="#22d3ee" stroke-width="0.8" opacity="0">
-          <animate attributeName="opacity" values="0;0.4" dur="1s" begin="0.6s" fill="freeze"/>
-          <animate attributeName="ry" values="55;60;55" dur="6s" repeatCount="indefinite"/>
-          <animate attributeName="rx" values="100;110;100" dur="8s" repeatCount="indefinite"/>
-        </ellipse>
-        
-        <!-- Ring 4: Social calibration -->
-        <ellipse cx="200" cy="125" rx="80" ry="42" fill="none" stroke="#f59e0b" stroke-width="0.8" opacity="0">
-          <animate attributeName="opacity" values="0;0.45" dur="1s" begin="0.9s" fill="freeze"/>
-          <animate attributeName="ry" values="38;42;38" dur="5s" repeatCount="indefinite"/>
-          <animate attributeName="rx" values="72;80;72" dur="7s" repeatCount="indefinite"/>
-        </ellipse>
-        
-        <!-- Ring 5: Free energy minimum (innermost) -->
-        <ellipse cx="200" cy="125" rx="45" ry="24" fill="none" stroke="#f472b6" stroke-width="1" opacity="0">
-          <animate attributeName="opacity" values="0;0.6" dur="1s" begin="1.2s" fill="freeze"/>
-          <animate attributeName="ry" values="22;24;22" dur="4s" repeatCount="indefinite"/>
-          <animate attributeName="rx" values="40;45;40" dur="6s" repeatCount="indefinite"/>
-        </ellipse>
-        
-        <!-- Center glow -->
-        <circle cx="200" cy="125" r="8" opacity="0">
-          <animate attributeName="opacity" values="0;0.6" dur="1.5s" begin="1.5s" fill="freeze"/>
-          <animate attributeName="r" values="6;10;6" dur="4s" repeatCount="indefinite"/>
-        </circle>
-        <circle cx="200" cy="125" r="8" fill="#e8e4dd" opacity="0">
-          <animate attributeName="opacity" values="0;0.6" dur="1.5s" begin="1.5s" fill="freeze"/>
-          <animate attributeName="r" values="3;4;3" dur="4s" repeatCount="indefinite"/>
-        </circle>
-        <!-- Outer glow -->
-        <circle cx="200" cy="125" r="20" fill="none" stroke="#e8e4dd" stroke-width="0.5" opacity="0">
-          <animate attributeName="opacity" values="0;0.15;0" dur="4s" begin="2s" repeatCount="indefinite"/>
-          <animate attributeName="r" values="15;35;15" dur="4s" begin="2s" repeatCount="indefinite"/>
-        </circle>
-        
-        <!-- Ring labels (right side, stacked) -->
-        <text x="378" y="38" fill="#00e5a0" font-family="JetBrains Mono, monospace" font-size="6" text-anchor="end" letter-spacing="1" opacity="0.5">REWARD PREDICTIONS</text>
-        <text x="378" y="54" fill="#6366f1" font-family="JetBrains Mono, monospace" font-size="6" text-anchor="end" letter-spacing="1" opacity="0.5">TIMESCALE ALIGNMENT</text>
-        <text x="378" y="70" fill="#22d3ee" font-family="JetBrains Mono, monospace" font-size="6" text-anchor="end" letter-spacing="1" opacity="0.5">HOMEOSTATIC BALANCE</text>
-        <text x="378" y="86" fill="#f59e0b" font-family="JetBrains Mono, monospace" font-size="6" text-anchor="end" letter-spacing="1" opacity="0.5">SOCIAL CALIBRATION</text>
-        <text x="378" y="102" fill="#f472b6" font-family="JetBrains Mono, monospace" font-size="6" text-anchor="end" letter-spacing="1" opacity="0.5">FREE ENERGY MINIMUM</text>
-        
-        <text x="200" y="240" fill="#4a4844" font-family="JetBrains Mono, monospace" font-size="8" text-anchor="middle" letter-spacing="2" opacity="0">
-          COHERENCE
-          <animate attributeName="opacity" values="0;0.5" dur="1s" begin="2s" fill="freeze"/>
-        </text>
-      </svg>
+  <!-- ========== FINALE ========== -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="finale-text">
+        <p>Happiness is not a single computation. It is a meta-signal — the brain's global assessment that reward
+          predictions are stable, timescales are aligned, homeostatic errors are low, social models are calibrated, and
+          the generative model is effectively minimizing free energy.</p>
+        <br><br>
+        <p>It is the feeling of <em>a mind that fits its world.</em></p>
+        <br><br>
+        <p>You can't hack your way around billions of years of Bayesian optimization. The system knows what it wants.
+          Alignment with that is what wellbeing <em>feels</em> like.</p>
+        <br><br>
+        <p style="font-size:0.7em; opacity: 0.5;">And sometimes the engineer sees it before the biologist does.</p>
+      </div>
     </div>
+  </section>
 
-    <div class="finale-text">
-      <p>Happiness is not a single computation. It is a meta-signal — the brain's global assessment that reward predictions are stable, timescales are aligned, homeostatic errors are low, social models are calibrated, and the generative model is effectively minimizing free energy.</p>
-      <br><br>
-      <p>It is the feeling of <em>a mind that fits its world.</em></p>
-      <br><br>
-      <p>You can't hack your way around billions of years of Bayesian optimization. The system knows what it wants. Alignment with that is what wellbeing <em>feels</em> like.</p>
-      <br><br>
-      <p style="font-size:0.7em; opacity: 0.5;">And sometimes the engineer sees it before the biologist does.</p>
-    </div>
-  </div>
-</section>
+  <footer class="footer">
+    <p>BASED ON A CONVERSATION BETWEEN A MIND AND ITS MODEL</p>
+  </footer>
 
-<footer class="footer">
-  <p>BASED ON A CONVERSATION BETWEEN A MIND AND ITS MODEL</p>
-</footer>
+  <script>
+    // ===== BACKGROUND PARTICLE SYSTEM =====
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
 
-<script>
-// ===== BACKGROUND PARTICLE SYSTEM =====
-const canvas = document.getElementById('bg-canvas');
-const ctx = canvas.getContext('2d');
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
 
-function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
-
-class Particle {
-  constructor() {
-    this.reset();
-  }
-  reset() {
-    this.x = Math.random() * canvas.width;
-    this.y = Math.random() * canvas.height;
-    this.vx = (Math.random() - 0.5) * 0.3;
-    this.vy = (Math.random() - 0.5) * 0.3;
-    this.radius = Math.random() * 1.5 + 0.3;
-    this.opacity = Math.random() * 0.15 + 0.02;
-    this.hue = Math.random() > 0.5 ? 160 : 240;
-  }
-  update() {
-    this.x += this.vx;
-    this.y += this.vy;
-    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-  }
-  draw() {
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-    ctx.fillStyle = `hsla(${this.hue}, 60%, 70%, ${this.opacity})`;
-    ctx.fill();
-  }
-}
-
-const particles = Array.from({length: 80}, () => new Particle());
-const connections = [];
-
-function drawParticles() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
-  particles.forEach(p => { p.update(); p.draw(); });
-  
-  for (let i = 0; i < particles.length; i++) {
-    for (let j = i + 1; j < particles.length; j++) {
-      const dx = particles[i].x - particles[j].x;
-      const dy = particles[i].y - particles[j].y;
-      const dist = Math.sqrt(dx*dx + dy*dy);
-      if (dist < 150) {
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.vx = (Math.random() - 0.5) * 0.3;
+        this.vy = (Math.random() - 0.5) * 0.3;
+        this.radius = Math.random() * 1.5 + 0.3;
+        this.opacity = Math.random() * 0.15 + 0.02;
+        this.hue = Math.random() > 0.5 ? 160 : 240;
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+      }
+      draw() {
         ctx.beginPath();
-        ctx.moveTo(particles[i].x, particles[i].y);
-        ctx.lineTo(particles[j].x, particles[j].y);
-        ctx.strokeStyle = `rgba(100, 140, 180, ${0.03 * (1 - dist/150)})`;
-        ctx.lineWidth = 0.5;
-        ctx.stroke();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${this.hue}, 60%, 70%, ${this.opacity})`;
+        ctx.fill();
       }
     }
-  }
-  requestAnimationFrame(drawParticles);
-}
-drawParticles();
 
-// ===== NEURAL NETWORK CANVAS =====
-const nCanvas = document.getElementById('neuralCanvas');
-const nCtx = nCanvas.getContext('2d');
+    const particles = Array.from({ length: 80 }, () => new Particle());
+    const connections = [];
 
-function resizeNeuralCanvas() {
-  const rect = nCanvas.parentElement.getBoundingClientRect();
-  nCanvas.width = rect.width;
-  nCanvas.height = rect.height;
-}
+    function drawParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-const neurons = [];
-const axons = [];
+      particles.forEach(p => { p.update(); p.draw(); });
 
-function initNeuralNet() {
-  resizeNeuralCanvas();
-  neurons.length = 0;
-  axons.length = 0;
-  
-  const w = nCanvas.width;
-  const h = nCanvas.height;
-  const layers = [4, 6, 8, 6, 4];
-  const layerX = layers.map((_, i) => (w * (i + 1)) / (layers.length + 1));
-  
-  layers.forEach((count, li) => {
-    for (let ni = 0; ni < count; ni++) {
-      const y = (h * (ni + 1)) / (count + 1);
-      neurons.push({
-        x: layerX[li],
-        y: y,
-        layer: li,
-        fire: 0,
-        fireDelay: Math.random() * 300
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 150) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(100, 140, 180, ${0.03 * (1 - dist / 150)})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(drawParticles);
+    }
+    drawParticles();
+
+    // ===== NEURAL NETWORK CANVAS =====
+    const nCanvas = document.getElementById('neuralCanvas');
+    const nCtx = nCanvas.getContext('2d');
+
+    function resizeNeuralCanvas() {
+      const rect = nCanvas.parentElement.getBoundingClientRect();
+      nCanvas.width = rect.width;
+      nCanvas.height = rect.height;
+    }
+
+    const neurons = [];
+    const axons = [];
+
+    function initNeuralNet() {
+      resizeNeuralCanvas();
+      neurons.length = 0;
+      axons.length = 0;
+
+      const w = nCanvas.width;
+      const h = nCanvas.height;
+      const layers = [4, 6, 8, 6, 4];
+      const layerX = layers.map((_, i) => (w * (i + 1)) / (layers.length + 1));
+
+      layers.forEach((count, li) => {
+        for (let ni = 0; ni < count; ni++) {
+          const y = (h * (ni + 1)) / (count + 1);
+          neurons.push({
+            x: layerX[li],
+            y: y,
+            layer: li,
+            fire: 0,
+            fireDelay: Math.random() * 300
+          });
+        }
+      });
+
+      neurons.forEach((n, i) => {
+        neurons.forEach((m, j) => {
+          if (m.layer === n.layer + 1 && Math.random() > 0.3) {
+            axons.push({ from: i, to: j, signal: 0 });
+          }
+        });
       });
     }
-  });
-  
-  neurons.forEach((n, i) => {
-    neurons.forEach((m, j) => {
-      if (m.layer === n.layer + 1 && Math.random() > 0.3) {
-        axons.push({ from: i, to: j, signal: 0 });
-      }
-    });
-  });
-}
 
-let nFrame = 0;
-function drawNeuralNet() {
-  if (!nCanvas.parentElement) return;
-  nCtx.clearRect(0, 0, nCanvas.width, nCanvas.height);
-  nFrame++;
-  
-  // Axons
-  axons.forEach(a => {
-    const from = neurons[a.from];
-    const to = neurons[a.to];
-    
-    if (from.fire > 0.5) a.signal = Math.min(a.signal + 0.04, 1);
-    else a.signal *= 0.96;
-    
-    nCtx.beginPath();
-    nCtx.moveTo(from.x, from.y);
-    nCtx.lineTo(to.x, to.y);
-    const alpha = 0.04 + a.signal * 0.2;
-    nCtx.strokeStyle = `rgba(99, 102, 241, ${alpha})`;
-    nCtx.lineWidth = 0.8 + a.signal;
-    nCtx.stroke();
-  });
-  
-  // Neurons
-  neurons.forEach((n, i) => {
-    if (nFrame % 120 === Math.floor(n.fireDelay) % 120) n.fire = 1;
-    n.fire *= 0.97;
-    
-    const r = 3 + n.fire * 4;
-    const glow = n.fire * 20;
-    
-    nCtx.beginPath();
-    nCtx.arc(n.x, n.y, r, 0, Math.PI * 2);
-    nCtx.fillStyle = `rgba(99, 102, 241, ${0.3 + n.fire * 0.7})`;
-    nCtx.shadowColor = 'rgba(99, 102, 241, 0.5)';
-    nCtx.shadowBlur = glow;
-    nCtx.fill();
-    nCtx.shadowBlur = 0;
-  });
-  
-  requestAnimationFrame(drawNeuralNet);
-}
+    let nFrame = 0;
+    function drawNeuralNet() {
+      if (!nCanvas.parentElement) return;
+      nCtx.clearRect(0, 0, nCanvas.width, nCanvas.height);
+      nFrame++;
 
-initNeuralNet();
-drawNeuralNet();
-window.addEventListener('resize', initNeuralNet);
+      // Axons
+      axons.forEach(a => {
+        const from = neurons[a.from];
+        const to = neurons[a.to];
 
-// ===== ATTRACTOR BASIN 3D =====
-function initAttractor() {
-  const container = document.getElementById('attractorViz');
-  if (!container) return;
-  
-  let svg = `<svg viewBox="-200 -120 400 240" style="width:100%;height:100%;overflow:visible;">`;
-  
-  // Basin curves (parabolic cross-sections)
-  for (let i = 0; i < 8; i++) {
-    const yOff = i * 6 - 20;
-    const scale = 0.8 + i * 0.05;
-    const opacity = 0.08 + (i / 8) * 0.15;
-    const hue = 160 + i * 5;
-    svg += `<path d="M${-140*scale} ${-60+yOff} Q${-70*scale} ${60+yOff} 0 ${80+yOff} Q${70*scale} ${60+yOff} ${140*scale} ${-60+yOff}" fill="none" stroke="hsla(${hue},60%,60%,${opacity})" stroke-width="1">
-      <animate attributeName="d" dur="${6+i*0.5}s" repeatCount="indefinite"
-        values="M${-140*scale} ${-60+yOff} Q${-70*scale} ${60+yOff} 0 ${80+yOff} Q${70*scale} ${60+yOff} ${140*scale} ${-60+yOff};
-                M${-140*scale} ${-55+yOff} Q${-65*scale} ${55+yOff} 0 ${75+yOff} Q${65*scale} ${55+yOff} ${140*scale} ${-55+yOff};
-                M${-140*scale} ${-60+yOff} Q${-70*scale} ${60+yOff} 0 ${80+yOff} Q${70*scale} ${60+yOff} ${140*scale} ${-60+yOff}" />
+        if (from.fire > 0.5) a.signal = Math.min(a.signal + 0.04, 1);
+        else a.signal *= 0.96;
+
+        nCtx.beginPath();
+        nCtx.moveTo(from.x, from.y);
+        nCtx.lineTo(to.x, to.y);
+        const alpha = 0.04 + a.signal * 0.2;
+        nCtx.strokeStyle = `rgba(99, 102, 241, ${alpha})`;
+        nCtx.lineWidth = 0.8 + a.signal;
+        nCtx.stroke();
+      });
+
+      // Neurons
+      neurons.forEach((n, i) => {
+        if (nFrame % 120 === Math.floor(n.fireDelay) % 120) n.fire = 1;
+        n.fire *= 0.97;
+
+        const r = 3 + n.fire * 4;
+        const glow = n.fire * 20;
+
+        nCtx.beginPath();
+        nCtx.arc(n.x, n.y, r, 0, Math.PI * 2);
+        nCtx.fillStyle = `rgba(99, 102, 241, ${0.3 + n.fire * 0.7})`;
+        nCtx.shadowColor = 'rgba(99, 102, 241, 0.5)';
+        nCtx.shadowBlur = glow;
+        nCtx.fill();
+        nCtx.shadowBlur = 0;
+      });
+
+      requestAnimationFrame(drawNeuralNet);
+    }
+
+    initNeuralNet();
+    drawNeuralNet();
+    window.addEventListener('resize', initNeuralNet);
+
+    // ===== ATTRACTOR BASIN 3D =====
+    function initAttractor() {
+      const container = document.getElementById('attractorViz');
+      if (!container) return;
+
+      let svg = `<svg viewBox="-200 -120 400 240" style="width:100%;height:100%;overflow:visible;">`;
+
+      // Basin curves (parabolic cross-sections)
+      for (let i = 0; i < 8; i++) {
+        const yOff = i * 6 - 20;
+        const scale = 0.8 + i * 0.05;
+        const opacity = 0.08 + (i / 8) * 0.15;
+        const hue = 160 + i * 5;
+        svg += `<path d="M${-140 * scale} ${-60 + yOff} Q${-70 * scale} ${60 + yOff} 0 ${80 + yOff} Q${70 * scale} ${60 + yOff} ${140 * scale} ${-60 + yOff}" fill="none" stroke="hsla(${hue},60%,60%,${opacity})" stroke-width="1">
+      <animate attributeName="d" dur="${6 + i * 0.5}s" repeatCount="indefinite"
+        values="M${-140 * scale} ${-60 + yOff} Q${-70 * scale} ${60 + yOff} 0 ${80 + yOff} Q${70 * scale} ${60 + yOff} ${140 * scale} ${-60 + yOff};
+                M${-140 * scale} ${-55 + yOff} Q${-65 * scale} ${55 + yOff} 0 ${75 + yOff} Q${65 * scale} ${55 + yOff} ${140 * scale} ${-55 + yOff};
+                M${-140 * scale} ${-60 + yOff} Q${-70 * scale} ${60 + yOff} 0 ${80 + yOff} Q${70 * scale} ${60 + yOff} ${140 * scale} ${-60 + yOff}" />
     </path>`;
-  }
-  
-  // Ball settling in basin
-  svg += `<circle cx="0" cy="72" r="6" fill="#00e5a0" opacity="0.8">
+      }
+
+      // Ball settling in basin
+      svg += `<circle cx="0" cy="72" r="6" fill="#00e5a0" opacity="0.8">
     <animate attributeName="cx" dur="4s" repeatCount="indefinite" values="0;8;-5;3;0" />
     <animate attributeName="cy" dur="4s" repeatCount="indefinite" values="72;70;73;71;72" />
   </circle>`;
-  svg += `<circle cx="0" cy="72" r="12" fill="none" stroke="#00e5a0" opacity="0.2">
+      svg += `<circle cx="0" cy="72" r="12" fill="none" stroke="#00e5a0" opacity="0.2">
     <animate attributeName="r" dur="2s" repeatCount="indefinite" values="8;18;8" />
     <animate attributeName="opacity" dur="2s" repeatCount="indefinite" values="0.3;0;0.3" />
   </circle>`;
-  
-  // Labels
-  svg += `<text x="0" y="110" fill="#4a4844" font-family="JetBrains Mono, monospace" font-size="9" text-anchor="middle" letter-spacing="2">ATTRACTOR BASIN</text>`;
-  svg += `<text x="0" y="62" fill="#00e5a0" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle" opacity="0.6" letter-spacing="1">WELLBEING</text>`;
-  
-  svg += `</svg>`;
-  container.innerHTML = svg;
-}
-initAttractor();
 
-// ===== SCROLL OBSERVER =====
-const sections = document.querySelectorAll('.section, .hero');
-const sectionInners = document.querySelectorAll('.section-inner');
-const navDots = document.querySelectorAll('.nav-dot');
-const progress = document.getElementById('progress');
+      // Labels
+      svg += `<text x="0" y="110" fill="#4a4844" font-family="JetBrains Mono, monospace" font-size="9" text-anchor="middle" letter-spacing="2">ATTRACTOR BASIN</text>`;
+      svg += `<text x="0" y="62" fill="#00e5a0" font-family="JetBrains Mono, monospace" font-size="7" text-anchor="middle" opacity="0.6" letter-spacing="1">WELLBEING</text>`;
 
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const inner = entry.target.querySelector('.section-inner');
-      if (inner) inner.classList.add('visible');
-      
-      // Animate timescale bars
-      if (entry.target.id === 'sec-3') {
-        entry.target.querySelectorAll('.ts-bar-fill').forEach(bar => {
-          bar.style.width = bar.dataset.width + '%';
-        });
-      }
-      
-      // Update nav dots
-      const idx = Array.from(sections).indexOf(entry.target);
-      navDots.forEach((d, i) => d.classList.toggle('active', i === idx));
+      svg += `</svg>`;
+      container.innerHTML = svg;
     }
-  });
-}, { threshold: 0.3 });
+    initAttractor();
 
-sections.forEach(s => observer.observe(s));
+    // ===== SCROLL OBSERVER =====
+    const sections = document.querySelectorAll('.section, .hero');
+    const sectionInners = document.querySelectorAll('.section-inner');
+    const navDots = document.querySelectorAll('.nav-dot');
+    const progress = document.getElementById('progress');
 
-// Nav dot clicks
-navDots.forEach(dot => {
-  dot.addEventListener('click', () => {
-    const idx = dot.dataset.section;
-    document.getElementById('sec-' + idx).scrollIntoView({ behavior: 'smooth' });
-  });
-});
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const inner = entry.target.querySelector('.section-inner');
+          if (inner) inner.classList.add('visible');
 
-// Progress bar
-window.addEventListener('scroll', () => {
-  const scrolled = window.scrollY / (document.body.scrollHeight - window.innerHeight);
-  progress.style.width = (scrolled * 100) + '%';
-});
-</script>
+          // Animate timescale bars
+          if (entry.target.id === 'sec-3') {
+            entry.target.querySelectorAll('.ts-bar-fill').forEach(bar => {
+              bar.style.width = bar.dataset.width + '%';
+            });
+          }
+
+          // Update nav dots
+          const idx = Array.from(sections).indexOf(entry.target);
+          navDots.forEach((d, i) => d.classList.toggle('active', i === idx));
+        }
+      });
+    }, { threshold: 0.3 });
+
+    sections.forEach(s => observer.observe(s));
+
+    // Nav dot clicks
+    navDots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        const idx = dot.dataset.section;
+        document.getElementById('sec-' + idx).scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    // Progress bar
+    window.addEventListener('scroll', () => {
+      const scrolled = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+      progress.style.width = (scrolled * 100) + '%';
+    });
+  </script>
 </body>
+
 </html>
