@@ -904,40 +904,57 @@
     }
 
     /* Footnotes */
+    /* Footnotes */
     .footnote-ref {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
       color: var(--accent-bio);
       cursor: pointer;
-      padding: 0 3px;
-      border-radius: 3px;
-      transition: background 0.2s;
-      text-decoration: none;
-      vertical-align: super;
-      line-height: 0;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      vertical-align: middle;
+      position: relative;
+      top: -2px;
+      margin-left: 4px;
+    }
+
+    .footnote-ref svg {
+      width: 18px;
+      height: 18px;
+      stroke-width: 2;
+      transition: transform 0.4s ease;
     }
 
     .footnote-ref:hover {
-      background: rgba(0, 229, 160, 0.1);
+      color: var(--text-primary);
+      filter: drop-shadow(0 0 8px var(--accent-bio));
+    }
+
+    .footnote-ref:hover svg {
+      transform: translateY(3px);
     }
 
     .footnote-box {
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s, margin 0.4s;
+      transition: max-height 1s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease, margin 0.8s ease;
       opacity: 0;
       margin: 0;
       background: linear-gradient(145deg, rgba(0, 229, 160, 0.04), rgba(0, 229, 160, 0.01));
       border: 1px solid rgba(0, 229, 160, 0.08);
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 0 28px;
+      pointer-events: none;
     }
 
     .footnote-box.open {
       max-height: 2000px;
       opacity: 1;
-      margin: 24px 0;
-      padding: 24px 28px;
+      margin: 32px 0;
+      padding: 32px 28px;
+      pointer-events: auto;
     }
 
     .footnote-header {
@@ -946,22 +963,24 @@
       letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--accent-bio);
-      margin-bottom: 14px;
+      margin-bottom: 18px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
 
     .footnote-num {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      border: 1px solid var(--accent-bio);
-      font-size: 10px;
+      width: 22px;
+      height: 22px;
       color: var(--accent-bio);
+    }
+
+    .footnote-num svg {
+      width: 16px;
+      height: 16px;
     }
 
     .footnote-body p {
@@ -1018,6 +1037,8 @@
     <div class="nav-dot" data-label="THE FURROW" data-section="6"></div>
     <div class="nav-dot" data-label="TWO WAYS" data-section="7"></div>
     <div class="nav-dot" data-label="SYNTHESIS" data-section="8"></div>
+    <div class="nav-dot" data-label="BASELINES" data-section="9"></div>
+    <div class="nav-dot" data-label="PRACTICAL" data-section="10"></div>
   </nav>
 
   <!-- ========== HERO ========== -->
@@ -1050,12 +1071,17 @@
 
       <p>A single-celled organism navigates chemical gradients, makes metabolic decisions, responds to stress, and
         maintains homeostasis. <strong>It's running a generative model of its local environment.<sup
-            class="footnote-ref" id="fn1-ref"
-            onclick="document.getElementById('fn1').classList.toggle('open')">1</sup></strong> Communication and
+            class="footnote-ref" data-target="fn1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6" />
+            </svg></span></strong> Communication and
         computation aren't inventions of the brain — they're the definition of life itself.</p>
 
       <div class="footnote-box" id="fn1">
-        <div class="footnote-header"><span class="footnote-num">1</span> Why "generative"?</div>
+        <div class="footnote-header"><span class="footnote-num"><svg viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6" />
+            </svg></span> Why "generative"?</div>
         <div class="footnote-body">
           <p>The word <em>generative</em> is doing real work here. A generative model doesn't just store data — it can
             <strong>generate predictions</strong> about what it should observe next, given its current internal state.
@@ -1096,10 +1122,16 @@
       <h2>The Telegraph Network <em>Awakens</em></h2>
 
       <p>As multicellular organisms grew, cells needed to coordinate across distances. Neurons emerged — not as
-        something fundamentally new, but as cells that specialized in one job: <strong>passing messages fast.<sup
-            class="footnote-ref" onclick="document.getElementById('fn2').classList.toggle('open')">➔</sup></strong></p>
+        something fundamentally new, but as cells that specialized in one job: <strong>passing messages fast.<span
+            class="footnote-ref" data-target="fn2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6" />
+            </svg></span></strong></p>
       <div class="footnote-box" id="fn2">
-        <div class="footnote-header"><span class="footnote-num">➔</span> Why speed changes everything</div>
+        <div class="footnote-header"><span class="footnote-num"><svg viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6" />
+            </svg></span> Why speed changes everything</div>
         <div class="footnote-body">
           <p>A chemical signal diffusing between cells travels at roughly 1 mm per second. An electrical signal down a
             myelinated axon travels at up to <em>120 meters per second</em> — a speed increase of five orders of
@@ -1121,11 +1153,16 @@
 
       <p>The genome doesn't encode the mind. There's nowhere near enough information in 20,000 genes to specify 86
         billion neurons with 100 trillion synapses. What genes provide are <strong>constraints and construction
-          rules<sup class="footnote-ref"
-            onclick="document.getElementById('fn3').classList.toggle('open')">⚡</sup></strong> — grow toward gradients,
+          rules<span class="footnote-ref" data-target="fn3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6" />
+            </svg></span></strong> — grow toward gradients,
         fire together wire together, prune what's unused.</p>
       <div class="footnote-box" id="fn3">
-        <div class="footnote-header"><span class="footnote-num">⚡</span> How 20,000 genes build 100 trillion connections
+        <div class="footnote-header"><span class="footnote-num"><svg viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6" />
+            </svg></span> How 20,000 genes build 100 trillion connections
         </div>
         <div class="footnote-body">
           <p>The human genome contains roughly 20,000 protein-coding genes. The brain has ~100 trillion synaptic
@@ -1156,11 +1193,17 @@
       <p>The dominant model of happiness — "seek pleasure, avoid pain" — is computationally naive. What the brain
         actually does is far more elegant.</p>
 
-      <p>Dopamine neurons don't encode "pleasure." They encode <strong>reward prediction errors<sup class="footnote-ref"
-            onclick="document.getElementById('fn4').classList.toggle('open')">✷</sup></strong> — the difference between
+      <p>Dopamine neurons don't encode "pleasure." They encode <strong>reward prediction errors<span
+            class="footnote-ref" data-target="fn4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6" />
+            </svg></span></strong> — the difference between
         what you expected and what happened.</p>
       <div class="footnote-box" id="fn4">
-        <div class="footnote-header"><span class="footnote-num">✷</span> The Schultz experiments that changed everything
+        <div class="footnote-header"><span class="footnote-num"><svg viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6" />
+            </svg></span> The Schultz experiments that changed everything
         </div>
         <div class="footnote-body">
           <p>In the 1990s, Wolfram Schultz recorded from dopamine neurons in monkeys and discovered something that
@@ -1224,10 +1267,16 @@
         </div>
       </div>
 
-      <p style="margin-top:24px"><strong>Deep happiness — eudaimonia — is when these timescales align.<sup
-            class="footnote-ref" onclick="document.getElementById('fn5').classList.toggle('open')">✦</sup></strong></p>
+      <p style="margin-top:24px"><strong>Deep happiness — eudaimonia — is when these timescales align.<span
+            class="footnote-ref" data-target="fn5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6" />
+            </svg></span></strong></p>
       <div class="footnote-box" id="fn5">
-        <div class="footnote-header"><span class="footnote-num">✦</span> Cross-timescale coherence and the ACC</div>
+        <div class="footnote-header"><span class="footnote-num"><svg viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6" />
+            </svg></span> Cross-timescale coherence and the ACC</div>
         <div class="footnote-body">
           <p>Your brain runs at least three parallel value systems. The <em>ventral striatum</em> evaluates immediate
             rewards (this chocolate tastes good). The <em>orbitofrontal cortex</em> computes contextual value (but I'm
@@ -1331,11 +1380,16 @@
 
       <p>This maps perfectly onto the prediction error framework. When you form a desire, you update your expected
         future state to include the desired outcome. From that moment, your brain computes a <strong>persistent negative
-          prediction error<sup class="footnote-ref"
-            onclick="document.getElementById('fn6').classList.toggle('open')">✹</sup></strong> — the gap between where
+          prediction error<span class="footnote-ref" data-target="fn6"><svg viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6" />
+            </svg></span></strong> — the gap between where
         you are and where your model says you "should" be.</p>
       <div class="footnote-box" id="fn6">
-        <div class="footnote-header"><span class="footnote-num">✹</span> How desire rewires your baseline</div>
+        <div class="footnote-header"><span class="footnote-num"><svg viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6" />
+            </svg></span> How desire rewires your baseline</div>
         <div class="footnote-body">
           <p>Before you want something, your predictive model has a certain baseline: <em>"this is the world."</em>
             Prediction errors are computed against that baseline. If something unexpectedly good happens, positive
@@ -1353,10 +1407,16 @@
       </div>
 
       <p>Every moment the desire remains unfulfilled, the system registers a low-grade error signal. <strong>You've
-          voluntarily shifted your reference point, and now reality perpetually falls short.<sup class="footnote-ref"
-            onclick="document.getElementById('fn7').classList.toggle('open')">✖</sup></strong></p>
+          voluntarily shifted your reference point, and now reality perpetually falls short.<span class="footnote-ref"
+            data-target="fn7"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6" />
+            </svg></span></strong></p>
       <div class="footnote-box" id="fn7">
-        <div class="footnote-header"><span class="footnote-num">✖</span> Prospect theory and hedonic adaptation</div>
+        <div class="footnote-header"><span class="footnote-num"><svg viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6" />
+            </svg></span> Prospect theory and hedonic adaptation</div>
         <div class="footnote-body">
           <p>Kahneman and Tversky's prospect theory showed that humans don't evaluate outcomes in absolute terms — they
             evaluate them <em>relative to a reference point</em>. Gains and losses are computed from wherever you
@@ -1385,11 +1445,17 @@
       </div>
 
       <p>The profound irony: <strong>desire borrows unhappiness from the future and makes you experience it now<sup
-            class="footnote-ref" onclick="document.getElementById('fn8').classList.toggle('open')">⏳</sup></strong>, in
+            class="footnote-ref" data-target="fn8"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6" />
+            </svg></span></strong>, in
         hopes that fulfillment will zero out the debt. But fulfillment triggers rebalancing and new desires. The only
         way to win is to be selective about which contracts you sign.</p>
       <div class="footnote-box" id="fn8">
-        <div class="footnote-header"><span class="footnote-num">⏳</span> Temporal borrowing and the dopamine debt</div>
+        <div class="footnote-header"><span class="footnote-num"><svg viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6" />
+            </svg></span> Temporal borrowing and the dopamine debt</div>
         <div class="footnote-body">
           <p>This isn't just a metaphor — it's a literal description of dopaminergic dynamics. When you anticipate a
             future reward, dopamine fires <em>now</em>, at the moment of anticipation. That dopamine mobilizes action
@@ -1415,11 +1481,17 @@
       <h2>The Attractors of <em>Wellbeing</em></h2>
 
       <p>Here's the deepest insight, and it comes not from neuroscience but from physics: <strong>totally different
-          microscopic structures can lead to the same macroscopic behavior<sup class="footnote-ref"
-            onclick="document.getElementById('fn9').classList.toggle('open')">⚛</sup></strong> — if the environmental
+          microscopic structures can lead to the same macroscopic behavior<span class="footnote-ref"
+            data-target="fn9"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6" />
+            </svg></span></strong> — if the environmental
         constraints enforce this and the system is flexible enough.</p>
       <div class="footnote-box" id="fn9">
-        <div class="footnote-header"><span class="footnote-num">⚛</span> Universality in physics</div>
+        <div class="footnote-header"><span class="footnote-num"><svg viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6" />
+            </svg></span> Universality in physics</div>
         <div class="footnote-body">
           <p>Universality is one of the deepest ideas in physics. Water boiling and iron losing its magnetism are
             completely different physical systems — different particles, different forces, different scales. Yet near
@@ -1447,10 +1519,16 @@
 
       <p>When people thrive on circadian rhythms, whole foods, family bonds, and personal growth — the explanation isn't
         "genes coded for it." The deeper explanation is: <strong>given the physical and thermodynamic constraints any
-          embodied information-processing system faces on Earth, these patterns are attractors.<sup class="footnote-ref"
-            onclick="document.getElementById('fn10').classList.toggle('open')">❂</sup></strong></p>
+          embodied information-processing system faces on Earth, these patterns are attractors.<span
+            class="footnote-ref" data-target="fn10"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6" />
+            </svg></span></strong></p>
       <div class="footnote-box" id="fn10">
-        <div class="footnote-header"><span class="footnote-num">❂</span> Dissipative structures and Prigogine</div>
+        <div class="footnote-header"><span class="footnote-num"><svg viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6" />
+            </svg></span> Dissipative structures and Prigogine</div>
         <div class="footnote-body">
           <p>Ilya Prigogine won the Nobel Prize for showing that systems far from thermodynamic equilibrium can
             spontaneously organize into stable patterns — <em>dissipative structures</em>. A candle flame, a hurricane,
@@ -1545,11 +1623,17 @@
       </div>
 
 
-      <p>For 25 years, a biologist told his father the same thing: <strong>"Stay in the evolutionary furrow."<sup
-            class="footnote-ref" onclick="document.getElementById('fn11').classList.toggle('open')">〰</sup></strong>
+      <p>For 25 years, a biologist told his father the same thing: <strong>"Stay in the evolutionary furrow."<span
+            class="footnote-ref" data-target="fn11"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6" />
+            </svg></span></strong>
       </p>
       <div class="footnote-box" id="fn11">
-        <div class="footnote-header"><span class="footnote-num">〰</span> Attractor basins in dynamical systems</div>
+        <div class="footnote-header"><span class="footnote-num"><svg viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6" />
+            </svg></span> Attractor basins in dynamical systems</div>
         <div class="footnote-body">
           <p>In dynamical systems theory, an <em>attractor</em> is a state (or set of states) that a system naturally
             evolves toward over time. An <em>attractor basin</em> is the region of initial conditions from which the
@@ -1581,10 +1665,15 @@
         corrupted inputs. Nutrition science, compromised by decades of industry funding and methodological failures, had
         constrained his hypothesis space.</p>
 
-      <p><strong>The biologist's father, an engineer, saw through it.<sup class="footnote-ref"
-            onclick="document.getElementById('fn12').classList.toggle('open')">⚙</sup></strong></p>
+      <p><strong>The biologist's father, an engineer, saw through it.<span class="footnote-ref" data-target="fn12"><svg
+              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6" />
+            </svg></span></strong></p>
       <div class="footnote-box" id="fn12">
-        <div class="footnote-header"><span class="footnote-num">⚙</span> First-person vs. third-person epistemology
+        <div class="footnote-header"><span class="footnote-num"><svg viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6" />
+            </svg></span> First-person vs. third-person epistemology
         </div>
         <div class="footnote-body">
           <p>There are two fundamentally different ways to know something. <em>Third-person knowledge</em> comes from
@@ -1722,10 +1811,16 @@
 
       <p>Cognitive tools like Occam's razor and falsification are meta-tools that operate on representations you already
         have. They help you prune and select hypotheses. <strong>But they can't save you if the hypothesis space itself
-          has been artificially constrained by institutional groupthink.<sup class="footnote-ref"
-            onclick="document.getElementById('fn13').classList.toggle('open')">⛓</sup></strong></p>
+          has been artificially constrained by institutional groupthink.<span class="footnote-ref"
+            data-target="fn13"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6" />
+            </svg></span></strong></p>
       <div class="footnote-box" id="fn13">
-        <div class="footnote-header"><span class="footnote-num">⛓</span> The limits of meta-cognition</div>
+        <div class="footnote-header"><span class="footnote-num"><svg viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6" />
+            </svg></span> The limits of meta-cognition</div>
         <div class="footnote-body">
           <p>Occam's razor says: don't multiply entities beyond necessity. Falsificationism says: prefer theories that
             make risky, testable predictions. These are <em>selection tools</em> — they help you choose between
@@ -1835,13 +1930,13 @@
     </div>
   </section>
 
-  <!-- ========== CH 9: PRACTICAL PROTOCOLS ========== -->
-  <section class="section" id="sec-practical">
+  <!-- ========== CH 9: BIOLOGICAL BASELINES ========== -->
+  <section class="section" id="sec-9">
     <div class="section-inner">
-      <div class="chapter-num neural section-divider">PRACTICAL PROTOCOLS</div>
-      <h2>Algorithms for a Coherent Life</h2>
+      <div class="chapter-num bio section-divider">BIOLOGICAL BASELINES</div>
+      <h2>Foundational Algorithms</h2>
 
-      <div class="compare-grid" style="grid-template-columns: 1fr; gap: 24px;">
+      <div class="compare-grid" style="grid-template-columns: 1fr; gap: 32px; max-width: 720px; margin: 0 auto;">
 
         <div class="compare-card engineer">
           <h4><span style="color:var(--accent-warm)">01.</span> SINGLE-TASKING</h4>
@@ -1850,7 +1945,7 @@
             Do one thing. Finish it. Close the loop.</p>
         </div>
 
-        <div class="compare-card biologist">
+        <div class="compare-card biological">
           <h4><span style="color:var(--accent-bio)">02.</span> DOPAMINE DETOX</h4>
           <p><strong>Reset your reward baseline.</strong> Constant high-dopamine inputs (social media, sugar, novelty)
             downregulate your receptors, making normal life feel "grey." Periodically remove all super-normal stimuli
@@ -1876,6 +1971,112 @@
           <p><strong>Move forward through space.</strong> Walking or running generates "optical flow" — the visual
             experience of the world moving past you. This specifically quiets the amygdala (fear center) and engages the
             forward-looking circuits of the brain. When stuck, <em>move</em>.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CH 10: PRACTICAL PROTOCOLS ========== -->
+  <section class="section" id="sec-10">
+    <div class="section-inner">
+      <div class="chapter-num neural section-divider">PRACTICAL PROTOCOLS</div>
+      <h2>Algorithms for a Coherent Life</h2>
+
+      <div class="compare-grid" style="grid-template-columns: 1fr; gap: 32px; max-width: 720px; margin: 0 auto;">
+
+        <div class="compare-card engineer">
+          <h4><span style="color:var(--accent-warm)">01.</span> Protect your sleep like your life depends on it</h4>
+          <p><strong>Because computationally it does.</strong> Every system that underlies wellbeing — prediction error
+            minimization, allostatic regulation, metabolic coherence — degrades catastrophically with circadian
+            disruption.</p>
+          <p>Sleep isn't rest. It's when the generative model consolidates, prunes, and recalibrates. Violating this is
+            like refusing to let a machine learning system run its training updates. Everything downstream breaks.
+            Non-negotiable.</p>
+        </div>
+
+        <div class="compare-card biologist">
+          <h4><span style="color:var(--accent-neural)">02.</span> Audit your desires ruthlessly</h4>
+          <p><strong>Every desire is a voluntary prediction error</strong> — a contract to suffer until fulfilled, and
+            then to recalibrate and want again. Before adopting a desire, ask: am I signing this contract because my
+            generative model needs this, or because I absorbed someone else's prior?</p>
+          <p>Most ambition is inherited groupthink wearing the mask of personal drive. Naval Ravikant's framing: "Desire
+            is a contract with yourself to be unhappy until you get what you want." Be very selective about which
+            contracts you sign. The fewer, the freer.</p>
+        </div>
+
+        <div class="compare-card bio">
+          <h4><span style="color:var(--accent-bio)">03.</span> Distrust your institutional priors</h4>
+          <p>A biologist spent decades dismissing supplementation as pseudoscience — because the literature said so,
+            because the consensus said so, because his training said so. Meanwhile his father, an engineer, simply tried
+            things, listened to his body, and got better results.</p>
+          <p>Years later, the biologist sat down with modern machine-learning models trained on epigenetic data — and in
+            a matter of days converged on the same conclusions his father had arrived at over decades of
+            self-experimentation.</p>
+          <p><strong>Learn to listen to the system.</strong> The body is running a generative model with billions of
+            years of calibration. The engineer's mindset — try, measure, update — beats a thousand meta-analyses funded
+            by people who need you to buy something.</p>
+        </div>
+
+        <div class="compare-card cyan">
+          <h4><span style="color:var(--accent-cyan)">04.</span> Stay in the furrow</h4>
+          <p><strong>Align with the deep attractors:</strong> circadian rhythms, whole foods, physical movement, close
+            relationships, intergenerational purpose, steady growth.</p>
+          <p>These aren't lifestyle choices — they're thermodynamic basins that any embodied information-processing
+            system converges on. Fighting them costs energy that could go toward actually living. The attractor is
+            universal. The path into it is individual.</p>
+        </div>
+
+        <div class="compare-card coral">
+          <h4><span style="color:var(--accent-coral)">05.</span> Optimize for minimal internal conflict</h4>
+          <p><strong>Cross-timescale alignment</strong> — where what you do today, what you're building this year, and
+            what your life is about all point in the same direction — is the computational signature of deep wellbeing.
+          </p>
+          <p>Most misery comes from parallel value systems being out of sync. When people say they're "at peace,"
+            they're describing a state where these parallel systems have converged. This matters more than any external
+            metric.</p>
+        </div>
+
+        <div class="compare-card engineer">
+          <h4><span style="color:var(--accent-warm)">06.</span> Build a tight feedback loop with reality</h4>
+          <p>Cognitive tools like Occam's razor are powerful, but they operate on whatever inputs they're fed. If the
+            inputs come from groupthink, the output is well-reasoned groupthink.</p>
+          <p><strong>The corrective is direct contact with reality:</strong> experiment, track outcomes, update. The
+            most important practice is ensuring your generative model gets honest error signals, not filtered ones.</p>
+        </div>
+
+        <div class="compare-card neural">
+          <h4><span style="color:var(--accent-neural)">07.</span> Treat social bonds as infrastructure</h4>
+          <p>The brain allocates massive computational resources to social modeling. Loneliness isn't an emotion — it's
+            a <strong>system-wide prediction error</strong> in the deepest social models.</p>
+          <p>A few high-trust, long-duration relationships are load-bearing structure. Don't mistake isolation for
+            freedom. Freedom <em>from</em> obligations is shallow; freedom <em>to</em> act and connect is deep.</p>
+        </div>
+
+        <div class="compare-card bio">
+          <h4><span style="color:var(--accent-bio)">08.</span> Seek the optimal learning rate</h4>
+          <p><strong>Flow and curiosity</strong> are the subjective experience of a generative model reducing
+            uncertainty at the right pace. Too little novelty and the system stagnates (boredom). Too much and it's
+            overwhelmed (anxiety).</p>
+          <p>The sweet spot is where one is consistently at the edge of competence. Stagnation is not peace; it's
+            slow-motion prediction error accumulation.</p>
+        </div>
+
+        <div class="compare-card cyan">
+          <h4><span style="color:var(--accent-cyan)">09.</span> Trust intuition, then verify it</h4>
+          <p>A son's intuition grasped in years what computational models eventually proved in days. Intuition isn't
+            mystical; it's your model having learned a compressed representation of deep statistical regularities before
+            you can explain why.</p>
+          <p><strong>The practice:</strong> trust the signal, then test it. Intuition proposes, empiricism disposes.
+            Neither alone is sufficient.</p>
+        </div>
+
+        <div class="compare-card coral">
+          <h4><span style="color:var(--accent-coral)">10.</span> Accept and disrupt groupthink</h4>
+          <p>No one fully sees their own priors. The move isn't to achieve impossible objectivity, but to build in
+            periodic disruption.</p>
+          <p><strong>Exposure to different models is the only update.</strong> Surround yourself with people whose blind
+            spots don't overlap with yours. Treat certainty as a flag to revisit, rather than a signal of truth.</p>
         </div>
 
       </div>
@@ -2131,11 +2332,40 @@
 
     sections.forEach(s => observer.observe(s));
 
-    // Nav dot clicks
-    navDots.forEach(dot => {
-      dot.addEventListener('click', () => {
-        const idx = dot.dataset.section;
-        document.getElementById('sec-' + idx).scrollIntoView({ behavior: 'smooth' });
+    // Footnote Hovers
+    const footnoteRefs = document.querySelectorAll('.footnote-ref');
+    const footnoteBoxes = document.querySelectorAll('.footnote-box');
+
+    footnoteRefs.forEach(ref => {
+      let timeout;
+      const targetId = ref.dataset.target;
+      const box = document.getElementById(targetId);
+
+      ref.addEventListener('mouseenter', () => {
+        clearTimeout(timeout);
+        // Close other boxes gracefully if needed
+        // footnoteBoxes.forEach(b => { if(b !== box) b.classList.remove('open'); });
+        box.classList.add('open');
+      });
+
+      ref.addEventListener('mouseleave', () => {
+        timeout = setTimeout(() => {
+          if (!box.matches(':hover')) {
+            box.classList.remove('open');
+          }
+        }, 100);
+      });
+
+      box.addEventListener('mouseenter', () => {
+        clearTimeout(timeout);
+      });
+
+      box.addEventListener('mouseleave', () => {
+        timeout = setTimeout(() => {
+          if (!ref.matches(':hover')) {
+            box.classList.remove('open');
+          }
+        }, 100);
       });
     });
 
