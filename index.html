@@ -952,7 +952,7 @@
       width: 18px;
       height: 18px;
       stroke-width: 2;
-      transition: transform 0.4s ease;
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     .footnote-ref:hover {
@@ -960,8 +960,9 @@
       filter: drop-shadow(0 0 8px var(--accent-bio));
     }
 
-    .footnote-ref:hover svg {
-      transform: translateY(3px);
+    .footnote-ref.active svg {
+      transform: rotate(180deg);
+      color: var(--text-primary);
     }
 
     .footnote-box {
@@ -974,7 +975,6 @@
       border: 1px solid rgba(0, 229, 160, 0.08);
       border-radius: 12px;
       padding: 0 28px;
-      pointer-events: none;
     }
 
     .footnote-box.open {
@@ -982,7 +982,6 @@
       opacity: 1;
       margin: 32px 0;
       padding: 32px 28px;
-      pointer-events: auto;
     }
 
     .footnote-header {
@@ -2357,40 +2356,37 @@
 
     sections.forEach(s => observer.observe(s));
 
-    // Footnote Hovers
+    // Footnote Click-to-Toggle
     const footnoteRefs = document.querySelectorAll('.footnote-ref');
-    const footnoteBoxes = document.querySelectorAll('.footnote-box');
 
     footnoteRefs.forEach(ref => {
-      let timeout;
       const targetId = ref.dataset.target;
       const box = document.getElementById(targetId);
 
-      ref.addEventListener('mouseenter', () => {
-        clearTimeout(timeout);
-        // Close other boxes gracefully if needed
-        // footnoteBoxes.forEach(b => { if(b !== box) b.classList.remove('open'); });
-        box.classList.add('open');
-      });
+      ref.addEventListener('click', (e) => {
+        e.preventDefault();
+        const isOpen = box.classList.contains('open');
 
-      ref.addEventListener('mouseleave', () => {
-        timeout = setTimeout(() => {
-          if (!box.matches(':hover')) {
-            box.classList.remove('open');
-          }
-        }, 100);
-      });
+        // Close others if you want exclusive expansion
+        // document.querySelectorAll('.footnote-box.open').forEach(b => {
+        //   if (b !== box) b.classList.remove('open');
+        // });
+        // document.querySelectorAll('.footnote-ref.active').forEach(r => {
+        //   if (r !== ref) r.classList.remove('active');
+        // });
 
-      box.addEventListener('mouseenter', () => {
-        clearTimeout(timeout);
-      });
+        box.classList.toggle('open');
+        ref.classList.toggle('active');
 
-      box.addEventListener('mouseleave', () => {
-        timeout = setTimeout(() => {
-          if (!ref.matches(':hover')) {
-            box.classList.remove('open');
-          }
-        }, 100);
+        // If opening, ensure it stays in view
+        if (!isOpen) {
+          setTimeout(() => {
+            const rect = box.getBoundingClientRect();
+            if (rect.bottom > window.innerHeight) {
+              box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+          }, 400);
+        }
       });
     });
 
