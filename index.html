@@ -1959,8 +1959,49 @@
         <p>Happiness is not a single computation. It is a meta-signal — the brain's global assessment that reward
           predictions are stable, timescales are aligned, homeostatic errors are low, social models are calibrated, and
           the generative model is effectively minimizing free energy.</p>
+
+        <div class="diagram-3d" style="height:280px; margin-top: 48px; margin-bottom: 32px;">
+          <svg class="emergence-viz" viewBox="0 0 400 200" style="width:100%;height:100%;">
+            <!-- Mind A: Warm Trajectory -->
+            <path id="pathA" d="M80,100 Q140,20 200,100 T320,100" fill="none" stroke="var(--accent-warm)"
+              stroke-width="0.5" opacity="0.3" stroke-dasharray="3,3" />
+            <!-- Mind B: Bio Trajectory -->
+            <path id="pathB" d="M100,160 C140,60 180,180 200,100 C220,20 260,140 300,40" fill="none"
+              stroke="var(--accent-bio)" stroke-width="0.5" opacity="0.3" stroke-dasharray="3,3" />
+            <!-- Mind C: Neural Trajectory -->
+            <path id="pathC" d="M120,40 Q200,170 280,40" fill="none" stroke="var(--accent-neural)" stroke-width="0.5"
+              opacity="0.3" stroke-dasharray="3,3" />
+
+            <!-- The shared center of subjective fit -->
+            <circle cx="200" cy="100" r="4" fill="#e8e4dd" opacity="0.6">
+              <animate attributeName="r" values="3;5;3" dur="4s" repeatCount="indefinite" />
+              <animate attributeName="opacity" values="0.3;0.7;0.3" dur="4s" repeatCount="indefinite" />
+            </circle>
+
+            <!-- Animated 'updates' moving along unique paths -->
+            <circle r="2.5" fill="var(--accent-warm)" opacity="0.8">
+              <animateMotion dur="5s" repeatCount="indefinite" path="M80,100 Q140,20 200,100 T320,100" />
+            </circle>
+            <circle r="2.5" fill="var(--accent-bio)" opacity="0.8">
+              <animateMotion dur="7s" repeatCount="indefinite"
+                path="M100,160 C140,60 180,180 200,100 C220,20 260,140 300,40" />
+            </circle>
+            <circle r="2.5" fill="var(--accent-neural)" opacity="0.8">
+              <animateMotion dur="6s" repeatCount="indefinite" path="M120,40 Q200,170 280,40" />
+            </circle>
+
+            <text x="200" y="190" fill="#4a4844" font-family="JetBrains Mono, monospace" font-size="7"
+              text-anchor="middle" letter-spacing="3" opacity="0.6">SUBJECTIVE EMERGENCE</text>
+          </svg>
+        </div>
+
+        <p>Because every mind is a unique architecture—a product of a specific, non-repeatable history of prediction
+          errors and a non-repeatable history of individual feedback loops and goals—this state of coherence never looks
+          the same twice.
+          There is no universal "solution" to happiness; only
+          the subjective emergence of a system that has found its own specific fit.</p>
         <br><br>
-        <p>It is the feeling of <em>a mind that fits its world.</em></p>
+        <p>Happiness is the feeling of <em>a mind that fits its world.</em></p>
         <br><br>
         <p>You can't hack your way around billions of years of Bayesian optimization. The system knows what it wants.
           Alignment with that is what wellbeing <em>feels</em> like.</p>
@@ -1974,8 +2015,56 @@
   <section class="section" id="sec-9">
     <div class="section-inner">
       <div class="section-divider"></div>
-      <div class="chapter-num bio">BIOLOGICAL BASELINES</div>
+      <div class="chapter-num bio">BIOLOGICAL BASELINES: The Hardware</div>
       <h2>Foundational Algorithms</h2>
+
+      <div class="compare-grid" style="grid-template-columns: 1fr; gap: 32px; max-width: 720px; margin: 0 auto;">
+
+        <div class="compare-card biological">
+          <h4><span style="color:var(--accent-bio)">01.</span> SLEEP: THE GLOBAL UPDATE</h4>
+          <p><strong>Run your training updates.</strong> Sleep isn't rest; it's the specific computational window where
+            the generative model prunes, consolidates, and recalibrates. Violating this is like refusing to let a
+            neural network run its optimization loop. Everything downstream breaks.</p>
+        </div>
+
+        <div class="compare-card warm">
+          <h4><span style="color:var(--accent-warm)">02.</span> LIGHT: THE SYSTEM SYNC</h4>
+          <p><strong>Anchor your master clock.</strong> Your hormonal orchestra is conducted by high-lux photon signals
+            at sunrise and darkness at sunset. Confuse the conductor (circadian rhythm), and the entire metabolic system
+            falls out of coherence. View the sun early; avoid it late.</p>
+        </div>
+
+        <div class="compare-card coral">
+          <h4><span style="color:var(--accent-coral)">03.</span> MOVEMENT: GROUND TRUTH</h4>
+          <p><strong>Generate optical flow.</strong> Moving forward through space specifically quiets the amygdala and
+            engages forward-looking circuits. It is the brain's way of verifying it is making progress through the
+            world. When stuck in a loop, <em>move</em>.</p>
+        </div>
+
+        <div class="compare-card biological">
+          <h4><span style="color:var(--accent-bio)">04.</span> METABOLISM: ENERGY GRID</h4>
+          <p><strong>Stabilize the compute fuel.</strong> The brain is a high-compute system. Fluctuating glucose and
+            systemic inflammation are "system noise" that disrupts prediction accuracy. Stable fuel leads to a stable
+            mind. Protect your insulin sensitivity like a critical resource.</p>
+        </div>
+
+        <div class="compare-card neural">
+          <h4><span style="color:var(--accent-neural)">05.</span> CONNECTION: SOCIAL INFRA</h4>
+          <p><strong>Calibrate against high-bandwidth agents.</strong> We are social predictive processors. A few
+            high-trust, long-duration relationships act as load-bearing infrastructure for the generative model of
+            "self." Loneliness is a system-wide prediction error.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CH 10: PRACTICAL PROTOCOLS ========== -->
+  <section class="section" id="sec-10">
+    <div class="section-inner">
+      <div class="section-divider"></div>
+      <div class="chapter-num neural">PRACTICAL PROTOCOLS: The Software</div>
+      <h2>Algorithms for a Coherent Life</h2>
 
       <div class="compare-grid" style="grid-template-columns: 1fr; gap: 32px; max-width: 720px; margin: 0 auto;">
 
@@ -1989,52 +2078,14 @@
         <div class="compare-card biological">
           <h4><span style="color:var(--accent-bio)">02.</span> DOPAMINE DETOX</h4>
           <p><strong>Reset your reward baseline.</strong> Constant high-dopamine inputs (social media, sugar, novelty)
-            downregulate your receptors, making normal life feel "grey." Periodically remove all super-normal stimuli
-            for 24 hours to recalibrate your sensitivity to simple rewards.</p>
+            downregulate your receptors, making normal life feel "grey." Periodically remove super-normal stimuli to
+            recalibrate your sensitivity to simple rewards.</p>
         </div>
 
         <div class="compare-card neural">
           <h4><span style="color:var(--accent-neural)">03.</span> IDLE NETWORK</h4>
-          <p><strong>Let the Default Mode Network consolidate.</strong> Your brain needs offline time to integrate
-            information and update its generative model. Boredom is not a bug; it's the system's maintenance mode. Stop
-            filling every gap with input.</p>
-        </div>
-
-        <div class="compare-card cyan">
-          <h4><span style="color:var(--accent-cyan)">04.</span> CIRCADIAN SYNC</h4>
-          <p><strong>Anchor your biological clock.</strong> View bright sunlight within 30 minutes of waking. Avoid
-            bright light after sunset. Your entire hormonal orchestra is conducted by this light signal. If the
-            conductor is confused, the music falls apart.</p>
-        </div>
-
-        <div class="compare-card coral">
-          <h4><span style="color:var(--accent-coral)">05.</span> OPTICAL FLOW</h4>
-          <p><strong>Move forward through space.</strong> Walking or running generates "optical flow" — the visual
-            experience of the world moving past you. This specifically quiets the amygdala (fear center) and engages the
-            forward-looking circuits of the brain. When stuck, <em>move</em>.</p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ========== CH 10: PRACTICAL PROTOCOLS ========== -->
-  <section class="section" id="sec-10">
-    <div class="section-inner">
-      <div class="section-divider"></div>
-      <div class="chapter-num neural">PRACTICAL PROTOCOLS</div>
-      <h2>Algorithms for a Coherent Life</h2>
-
-      <div class="compare-grid" style="grid-template-columns: 1fr; gap: 32px; max-width: 720px; margin: 0 auto;">
-
-        <div class="compare-card engineer">
-          <h4><span style="color:var(--accent-warm)">01.</span> Protect your sleep like your life depends on it</h4>
-          <p><strong>Because computationally it does.</strong> Every system that underlies wellbeing — prediction error
-            minimization, allostatic regulation, metabolic coherence — degrades catastrophically with circadian
-            disruption.</p>
-          <p>Sleep isn't rest. It's when the generative model consolidates, prunes, and recalibrates. Violating this is
-            like refusing to let a machine learning system run its training updates. Everything downstream breaks.
-            Non-negotiable.</p>
+          <p><strong>Allow for model consolidation.</strong> Boredom is the system's maintenance mode. stop filling
+            every gap with input; allow the Default Mode Network to update your generative model.</p>
         </div>
 
         <div class="compare-card biologist">
@@ -2088,29 +2139,9 @@
         </div>
 
         <div class="compare-card neural">
-          <h4><span style="color:var(--accent-neural)">07.</span> Treat social bonds as infrastructure</h4>
-          <p>The brain allocates massive computational resources to social modeling. Loneliness isn't an emotion — it's
-            a <strong>system-wide prediction error</strong> in the deepest social models.</p>
-          <p>A few high-trust, long-duration relationships are load-bearing structure. Don't mistake isolation for
-            freedom. Freedom <em>from</em> obligations is shallow; freedom <em>to</em> act and connect is deep.</p>
-        </div>
-
-        <div class="compare-card bio">
-          <h4><span style="color:var(--accent-bio)">08.</span> Seek the optimal learning rate</h4>
-          <p><strong>Flow and curiosity</strong> are the subjective experience of a generative model reducing
-            uncertainty at the right pace. Too little novelty and the system stagnates (boredom). Too much and it's
-            overwhelmed (anxiety).</p>
-          <p>The sweet spot is where one is consistently at the edge of competence. Stagnation is not peace; it's
-            slow-motion prediction error accumulation.</p>
-        </div>
-
-        <div class="compare-card cyan">
-          <h4><span style="color:var(--accent-cyan)">09.</span> Trust intuition, then verify it</h4>
-          <p>A son's intuition grasped in years what computational models eventually proved in days. Intuition isn't
-            mystical; it's your model having learned a compressed representation of deep statistical regularities before
-            you can explain why.</p>
-          <p><strong>The practice:</strong> trust the signal, then test it. Intuition proposes, empiricism disposes.
-            Neither alone is sufficient.</p>
+          <h4><span style="color:var(--accent-neural)">09.</span> SEIZE THE FLOW</h4>
+          <p><strong>Optimize your learning rate.</strong> Stay at the edge of competence where novelty reduces
+            uncertainty at the right pace. Too little is stagnation; too much is overwhelm.</p>
         </div>
 
         <div class="compare-card coral">
@@ -2120,9 +2151,7 @@
           <p><strong>Exposure to different models is the only update.</strong> Surround yourself with people whose blind
             spots don't overlap with yours. Treat certainty as a flag to revisit, rather than a signal of truth.</p>
         </div>
-
       </div>
-
     </div>
   </section>
 
